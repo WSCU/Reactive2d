@@ -10,7 +10,7 @@ from java.lang import System
 
 # Use from for user-level stuff and import for engine level stuff
 from pythonfrp.Engine import *
-from Rapper import *
+from reactive2D import *
 
 # ExternalEvents is the event dictionary used by the engine.
 externalEvents = {}
