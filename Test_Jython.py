@@ -5,23 +5,16 @@ from javax.swing import JPanel
 from javax.swing import Timer
 from java.awt.event import ActionListener
 from java.awt.event import MouseAdapter
+from java.awt.event import KeyAdapter
 from java.lang import System
 
 # Use from for user-level stuff and import for engine level stuff
 from pythonfrp.Engine import *
-from pythonfrp.StaticNumerics import *
-import pythonfrp.Proxy as Proxy
-from pythonfrp.Functions import *
-from pythonfrp.Numerics import *
-import pythonfrp.Globals as Globals
-from pythonfrp.Factory import eventObserver
+from Rapper import *
 
-# Globals that define the state of the world.  Screen objects are all of the drawable objects and externalEvents is the event
-# dictionary used by the engine.
-screenObjects = []
+# ExternalEvents is the event dictionary used by the engine.
 externalEvents = {}
-# This is the time at which the engine starts.  The [] is to make it mutable.
-startTime = [0]
+# LocalTime and World Objects are in Globals
 
 
 # This is Jython code to interface with mouse events
@@ -30,6 +23,13 @@ class MA(MouseAdapter):
         self.clicker = clicker
     def mouseClicked(self, event):
         self.clicker(event.getX(), event.getY())
+        
+class KA(KeyAdapter):
+    def __init__(self, clicker):
+        self.clicker = clicker
+    def keyTyped(self, event):
+        print("Key Pressed: " + str(event.getKeyChar()))
+        self.clicker(event.getKeyChar())
 
 # This is Jython code to interface with a graphics panel
 class Canvas(JPanel):
@@ -37,6 +37,7 @@ class Canvas(JPanel):
         super(Canvas, self).__init__()
         self.drawer = drawer
         self.click = click
+#        self.key = key
         self.addMouseListener(MA(lambda x, y: self.click(x,y)))
 
     def paint(self, g):
@@ -57,8 +58,11 @@ class Example(JFrame, ActionListener):
 # Add an external event on a mouse click
     def myclick(self, x, y):
         externalEvents['LeftMouseButton'] = SP2(x,y)
+    def mykey(self, k):
+        externalEvents['KeyTyped'] = string(k)
 
     def initUI(self):
+        self.addKeyListener(KA(lambda k: k))
         self.xp = 0
         self.yp = 0
         self.canvas = Canvas(lambda g:self.mypaint(g), lambda x,y: self.myclick(x,y))
@@ -70,7 +74,6 @@ class Example(JFrame, ActionListener):
         self.setLocationRelativeTo(None)
         self.setBackground(Color(255,255,255))
         self.setVisible(True)
-        
         self.timer = Timer(50, self)
         self.timer.start()
 
@@ -84,52 +87,30 @@ class Example(JFrame, ActionListener):
         externalEvents.clear()
         self.repaint()
 
-
-# This is the code that creates an arbitrary screen object (a reactive object visible on the screen).  Right now
-# used to draw a circle.
-        
-class ScreenObject(Proxy.Proxy):
-        def __init__ (self, position):
-            Proxy.Proxy.__init__(self, name = 'Circle', updater = circleUpdate,
-                             types = {"position": p2Type})
-            self.position = position
-#            print('created circle')
-
-# This is the updater that is called by the 
-def circleUpdate(self):
-    positionNow = self._get("position")
-#    print('Positiong Now:' + str(positionNow))
-# This is what makes the circle visible.  The draw code (a function that takes a graphics object) is placed
-# in the screenObjects list
-    screenObjects.append(lambda g: drawCircle(g, positionNow))
-
-# The draw code for a circle
-def drawCircle(g, p):
-    g.setColor(Color(255,0,0))
-    g.fillOval(int(p.x), int(p.y), 20, 20)
-
 # This is the start function that initializes the reactive engine and then starts the animation
 def start():
     print("Starting...")
     startTime[0] = System.currentTimeMillis()
     initialize(0)
     Example()
-    
-# A user-level function to create a reactive circle.  x is the position of the circle
-def circle(x):
-    return ScreenObject(x)
-
-# This is an event observer for the left mouse button
-def lbp():
-    return eventObserver('LeftMouseButton')
 
 # From here on this is user code - create a moving circle on each mouse click that starts from the position of the click
 
 def makeCircle(m,v):
     circle(p2(localTime*50+v.x,localTime*50+v.y))
 
+def makeSquare(m, v):
+    square(p2(localTime*50+v.x,localTime*50+v.y))
+    
+def makeTriangle(m, v):
+    triangle(p2(localTime*50+v.x,localTime*50+v.y))
+    
+def typeKey(m, v):
+    print(string(v.k))
+
 # React to each mouse press by creating a new circle
-react(lbp(),makeCircle)
+react(lbp(),makeTriangle)
+react(kT(),typeKey)
 
 # Start!
 start()
