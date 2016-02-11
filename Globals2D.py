@@ -1,6 +1,5 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
+from pythonfrp.StaticNumerics import *
+
 
 #--- all the tings that appear on screen as programs runs, a bunch of lambdas  ---#
 screenObjects = []
@@ -9,4 +8,4 @@ screenObjects = []
 startTime = [0]
 
 #---  track mouse position as program runs  ---#
-mouse_pos = [(0,0)]
+mouse_pos = [SP2(0,0)]

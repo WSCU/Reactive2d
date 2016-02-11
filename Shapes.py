@@ -13,17 +13,9 @@ from Proxy2D import *
 #This user level
 def circle(position, radius = 20):
     return ScreenObject(updater = circleUpdate, types = {"position": p2Type,
-        "radius": numType}, name = 'Circle', init = circleInit, position = position,
-<<<<<<< Updated upstream
-        radius = radius)    #ScreenObject class in Reactive2D Proxy2D.py && Types-variables in pythonfrp Types.py
-=======
-<<<<<<< HEAD
+        "radius": numType}, name = 'Circle', init = circleInit, position = position,  
         radius = radius)
-
-=======
-        radius = radius)    #ScreenObject class in Reactive2D Proxy2D.py && Types-variables in pythonfrp Types.py
->>>>>>> 16b3d35c35e5e93a522da9ed93bcd79ef2685acf
->>>>>>> Stashed changes
+ 
 #Reactive Stuff
 def circleInit(so, params):
     so.position = params["position"]
