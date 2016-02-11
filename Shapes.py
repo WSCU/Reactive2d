@@ -35,7 +35,7 @@ def circleUpdate(self):
 #Circle Drawing code
 def drawCircle(g, p, r):
     g.setColor(Color(255,0,0))
-    g.fillOval(int(p.x-r), int(p.y-r), 2*r, 2*r)
+    g.fillOval(int(p.x-r), int(p.y-r), int(2*r), int(2*r))
 
 
 #Square
