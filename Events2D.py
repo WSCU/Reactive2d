@@ -1,4 +1,4 @@
-from pythonfrp.Factory import eventObserver
+from pythonfrp.Engine import *
 
 #left mouse button event observer
 def lbp():

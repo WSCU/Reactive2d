@@ -5,8 +5,7 @@
 from java.awt import Color
 from java.lang import Math
 
-import pythonfrp.Proxy as Proxy
-from pythonfrp.Numerics import *
+from pythonfrp.Engine import *
 from Globals2D import *
 
 from jarray import array

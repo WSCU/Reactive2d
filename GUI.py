@@ -10,9 +10,9 @@ from java.lang import System
 from javax.swing import JFrame
 from javax.swing import JPanel
 from javax.swing import Timer
+
 from pythonfrp.Engine import *
 from Reactive2D import *
-from pythonfrp.StaticNumerics import *
 
 #-----  declarations  ------#
 
