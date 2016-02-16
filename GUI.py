@@ -77,7 +77,7 @@ class Example(JFrame, ActionListener):
 # Paint all of the objects in screenObjects
     def mypaint(self, g):
         for object in screenObjects:
-            object(g)
+            object._draw(g) #Now calls a _draw method on each object, instead of just having a bunch of lambdas in screenObjects.
             
 # Add an external event on a mouse click
     def myclick(self, x, y):
@@ -121,9 +121,9 @@ mouse = ObserverF(lambda x: mouse_pos[0], type = numType)
  # This is the start function that initializes the reactive engine and then starts the animation
 def start():
     print("Starting...")
-    startTime[0]=System.currentTimeMillis()
-    initialize(0)
-    Example()
+    startTime[0]=System.currentTimeMillis() 
+    initialize(0) 
+    Example() 
 #        print(currentTime-startTime[0])
 #        print('Objects: ' + str(Globals.worldObjects))
  
