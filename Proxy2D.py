@@ -7,21 +7,82 @@ from java.lang import Math
 
 from pythonfrp.Engine import *
 from Globals2D import *
+from Shapes import *
 
 from jarray import array
 
 class ScreenObject(Proxy.Proxy):
-    def __init__ (self, updater=None, types={}, name='', init=None, ** params):
+#    def __init__ (self, updater=None, types={}, name='', init=None, ** params):
+#        Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
+#        init(self, params)
+        
+    
+    def __init__ (self, updater=None, types={}, name='', init=None, drawer = None, ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
-        init(self, params)
+        init(self, params)    
+        self._drawer = drawer
+        
+    def _draw(self, g):
+        #print("Inside _draw")
+        self._drawer(self, g)
+        
+    #def _collision(self, p2):
+        
+        
+        
+        #bounding_box(self)
+        
+    #    self.params = params[BoundingBox((p2(self.params[x,y]), p2(self.params[x,y]), p2(self.params[x,y]), self.params[x,y]))]
+        
+#        self.params = params[BoundingBox(p2(params["position"]-params["width"]/2, params["position"]-params["height"]/2),p2(params["position"]+params["width"]/2, params["position"]-params["height"]/2),p2(params["position"]+params["width"]/2, params["position"]+params["height"]/2),p2(params["position"]-params["width"]/2, params["position"]-params["height"]/2))]
+        
+  
+        
+#        bottomLeft = p2(params["position"]-params["width"]/2, params["position"]-params["height"]/2)
+#        bottomRight = p2(params["position"]+params["width"]/2, params["position"]-params["height"]/2)
+#        topRight = p2(params["position"]+params["width"]/2, params["position"]+params["height"]/2)
+#        topLeft = p2(params["position"]-params["width"]/2, params["position"]-params["height"]/2)
+   #     width =  self._get("width")
+   #     height = self._get("height")
+   #     center = p2(self._get("position"))
+        
+ #       print "bottom left:  " + str(bottomLeft) + "    bottom right:  " + str(bottomRight) + "top left:  " + str(topLeft) + "top right:  " + str(topRight)
+ #       print "position:  " + str(position)
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    #    if(self.name == "square"):
+            
+        #    self.box = [p2(self._get("position")/2-self._get("width"), self._get("position")/2-self._get("height")), p2(self._get("position")/2-self._get("width"), self._get("position")/2+self._get("height"),p2(self._get("position")/2+self._get("width"), self._get("position")/2-self._get("height")),p2(self._get("position")/2+self._get("width"), self._get("position")/2+self._get("height")))]
+     #       print "----------" + str(self.box)
+        
 #        print('Created Object')
 
 
     #---  touch logic for Shapes  ---#
+
+#    def bound_square(object):
+        
+
 #    def _touches(self, handle, trace=False):
             
             #---  trace is for debugging not sure of the how, when, what or why  ---#
-##            if trace:
+#            if trace:
  #               print("Touch: " + repr(self) + " " + repr(handle))
 #            #print (repr(self._cRadius))
 #            #print (repr(self.get("size")))
