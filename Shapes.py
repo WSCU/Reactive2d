@@ -22,7 +22,7 @@ def circleInit(so, params):
     so.radius = params["radius"]
     def getCollisionVector(self, obj):
         directionVector = obj.position - self.position
-        dist = distance(self,obj)
+        dist = _distance(self,obj)
         directionUnit = (directionVector.x / dist, directionVector.y / dist)
         collisionVector = directionUnit * radius
         return collisionVector
@@ -86,7 +86,7 @@ def squareInit(so, params):
     so.height = params["height"]
     def getCollisionVector(self, obj):
         directionVector = obj.position - self.position
-        dist = distance(self,obj)
+        dist = _distance(self,obj)
         directionUnit = (directionVector.x / dist, directionVector.y / dist)
         collisionVector = directionUnit * width
         return collisionVector
@@ -123,7 +123,7 @@ def triangleInit(so, params):
     so.position = params["position"]
     def getCollisionVector(self, obj):
         directionVector = obj.position - self.position
-        dist = distance(self,obj)
+        dist = _distance(self,obj)
         directionUnit = (directionVector.x / dist, directionVector.y / dist)
         collisionVector = directionUnit * 15
         return collisionVector
