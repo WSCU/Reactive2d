@@ -20,6 +20,12 @@ def circle(position, radius = 20):
 def circleInit(so, params):
     so.position = params["position"]
     so.radius = params["radius"]
+    def getCollisionVector(self, obj):
+        directionVector = obj.position - self.position
+        dist = distance(self,obj)
+        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * radius
+        return collisionVector
 
 #Gets the things that are requried to draw a circle
 def circleUpdate(self):
@@ -78,6 +84,12 @@ def squareInit(so, params):
     so.position = params["position"]
     so.width = params["width"]
     so.height = params["height"]
+    def getCollisionVector(self, obj):
+        directionVector = obj.position - self.position
+        dist = distance(self,obj)
+        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * width
+        return collisionVector
    
 
 #def squareUpdater(self): 
@@ -109,6 +121,12 @@ def triangle(position):
         name = 'Triangle', init = triangleInit, drawer = drawTriangle, position = position)
 def triangleInit(so, params):
     so.position = params["position"]
+    def getCollisionVector(self, obj):
+        directionVector = obj.position - self.position
+        dist = distance(self,obj)
+        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * 15
+        return collisionVector
 def triangleUpdater(self):
     screenObjects.append(self)
 #def drawTriangle(g, p):

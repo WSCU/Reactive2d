@@ -26,6 +26,11 @@ class ScreenObject(Proxy.Proxy):
         #print("Inside _draw")
         self._drawer(self, g)
         
+        
+    def getCollisionVector(self, obj):
+        pass
+
+        
     #def _collision(self, p2):
         
         
@@ -49,8 +54,16 @@ class ScreenObject(Proxy.Proxy):
  #       print "bottom left:  " + str(bottomLeft) + "    bottom right:  " + str(bottomRight) + "top left:  " + str(topLeft) + "top right:  " + str(topRight)
  #       print "position:  " + str(position)
   
+        def _distance(o1, o2):
+            return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
         
         
+        def _collides(obj1, obj2):
+            r1 = obj1.getCollisionVector(obj2) 
+            r2 = obj2.getCollisionVector(obj1)
+            #we know now where one object is relative to the other and now want to know when these points cross
+            return distance(obj1.postion + r1 , obj2.postition + r2) <= 0
+    
         
         
         
