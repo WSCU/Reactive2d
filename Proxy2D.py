@@ -62,7 +62,7 @@ class ScreenObject(Proxy.Proxy):
             r1 = obj1.getCollisionVector(obj2) 
             r2 = obj2.getCollisionVector(obj1)
             #we know now where one object is relative to the other and now want to know when these points cross
-            return distance(obj1.postion + r1 , obj2.postition + r2) <= 0
+            return (obj1.layer == obj2.layer) and (distance(obj1.postion + r1 , obj2.postition + r2) <= 0)
     
         
         
