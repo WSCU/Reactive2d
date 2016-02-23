@@ -14,10 +14,13 @@ from javax.swing import Timer
 from pythonfrp.Engine import *
 from Reactive2D import *
 
+import random
+
 #-----  declarations  ------#
 
 # ExternalEvents is the event dictionary used by the engine.
 externalEvents = {}
+balls = []
 # LocalTime and World Objects are in Globals
 
 
@@ -48,8 +51,12 @@ class KA(KeyAdapter):
     def __init__(self, clicker):
         self.clicker = clicker
     def keyTyped(self, event):
-        print("Key Pressed: " + str(event.getKeyChar()))
-        self.clicker(event.getKeyChar())
+#        print("Key Pressed: " + str(event.getKeyCode()) + "| Key Code: " + str(event.getKeyCode()))
+        self.clicker(event.getKeyCode())
+    def keyPressed(self, event):
+        self.clicker(event.getKeyText(event.getKeyCode()))
+        #Uncomment if you need to know what a key is being saved as
+#        print(event.getKeyText(event.getKeyCode()))
 
 # This is Jython code to interface with a graphics panel
 class Canvas(JPanel):
@@ -85,12 +92,13 @@ class Example(JFrame, ActionListener):
     
     def mykey(self, k):
         externalEvents['KeyTyped']=string(k)
+#        print("Key Pressed: " + string(k))
 
     def my_move(self, x, y):
         mouse_pos[0]= SP2(x,y)
 
     def initUI(self):
-        self.addKeyListener(KA(lambda k: k))
+        self.addKeyListener(KA(lambda k: self.mykey(k)))
         self.xp=0
         self.yp=0
         self.canvas=Canvas(lambda g:self.mypaint(g), lambda x, y: self.myclick(x, y), lambda x, y: self.my_move(x, y))
@@ -109,6 +117,8 @@ class Example(JFrame, ActionListener):
 
     def actionPerformed(self, e):
         currentTime=System.currentTimeMillis()
+        if ((currentTime-startTime[0]) % 75 == 0):
+            balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
         del screenObjects[:]
 #        print(currentTime-startTime[0])
 #        print('Objects: ' + str(Globals.worldObjects))
