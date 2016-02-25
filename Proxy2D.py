@@ -11,20 +11,70 @@ from Shapes import *
 
 from jarray import array
 
-class ScreenObject(Proxy.Proxy):
+#class ScreenObject(Proxy.Proxy):
 #    def __init__ (self, updater=None, types={}, name='', init=None, ** params):
 #        Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
 #        init(self, params)
         
     
-    def __init__ (self, updater=None, types={}, name='', init=None, drawer = None, ** params):
-        Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
-        init(self, params)    
-        self._drawer = drawer
+#    def __init__ (self, updater=None, types={}, name='', init=None, drawer = None, ** params):
+#        Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
+#        init(self, params)    
+#        self._drawer = drawer
+        
+#    def _draw(self, g):
+        #print("Inside _draw")
+#        self._drawer(self, g)
+        
+        
+#    def getCollisionVector(self, obj):
+#        pass
+    
+#    def _distance(o1, o2):
+#        return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
+        
+        
+#    def _collides(obj1, obj2):
+#        r1 = obj1.getCollisionVector(obj2) 
+#        r2 = obj2.getCollisionVector(obj1)
+        #we know now where one object is relative to the other and now want to know when these points cross
+#        return distance(obj1.postion + r1 , obj2.postition + r2) <= 0
+        
+class ScreenObject(object):
+    
+    #review this constructor for stuff.
+    def __init__ (self, updater = None, types = {}, name = '', init = None, ** params):
+        self.updater = updater
+        self.types = types
+        self.name = name
+        self.init = init
         
     def _draw(self, g):
-        #print("Inside _draw")
-        self._drawer(self, g)
+        self._drawer = drawer
+        
+    def getCollisionVector(self, object):
+        pass #To be dicided by its subclasses
+    
+    def _applyTexture(self, method):
+        pass #A placeholder pass.  I'm not sure if the method could be generizable or if it will have to be handled by each shape individually.
+    #A crop won't, but if we want to stretch/compress the image to fit...we may.
+    
+    def draw(self, g):
+        pass #Is there a general way to draw a screen object?  We''ll seeee.
+    
+    def update(self):
+        screenObjects.append(self);
+
+def _distance(o1, o2):
+        return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
+        
+        
+def _collides(obj1, obj2):
+    r1 = obj1.getCollisionVector(obj2) 
+    r2 = obj2.getCollisionVector(obj1)
+    #we know now where one object is relative to the other and now want to know when these points cross
+    return distance(obj1.postion + r1 , obj2.postition + r2) <= 0
+
         
     #def _collision(self, p2):
         
@@ -49,8 +99,7 @@ class ScreenObject(Proxy.Proxy):
  #       print "bottom left:  " + str(bottomLeft) + "    bottom right:  " + str(bottomRight) + "top left:  " + str(topLeft) + "top right:  " + str(topRight)
  #       print "position:  " + str(position)
   
-        
-        
+
         
         
         

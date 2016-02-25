@@ -11,6 +11,17 @@ from Proxy2D import *
 
 #Circle
 #This user level
+class Circle(ScreenObject):
+    def getCollisionVector(self, obj):
+        directionVector = obj.position - self.position
+        dist = _distance(self,obj)
+        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * radius
+        return collisionVector
+
+
+
+
 def circle(position, radius = 20):
     return ScreenObject(updater = circleUpdate, types = {"position": p2Type,
         "radius": numType}, name = 'Circle', init = circleInit, drawer = drawCircle, position = position,  
@@ -20,6 +31,8 @@ def circle(position, radius = 20):
 def circleInit(so, params):
     so.position = params["position"]
     so.radius = params["radius"]
+
+
 
 #Gets the things that are requried to draw a circle
 def circleUpdate(self):
@@ -44,7 +57,17 @@ def drawCircle(self, g):
     g.fillOval(int(p.x-r), int(p.y-r), int(2*r), int(2*r))
 
 #Square
-
+class Square(ScreenObject):
+    def getCollisionVector(self, obj):
+        directionVector = obj.position - self.position
+        dist = _distance(self,obj)
+        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * width
+        return collisionVector
+    
+    
+    
+    
 
 def square(position, height = 20, width = 40):
     
@@ -78,6 +101,7 @@ def squareInit(so, params):
     so.position = params["position"]
     so.width = params["width"]
     so.height = params["height"]
+
    
 
 #def squareUpdater(self): 
@@ -104,11 +128,25 @@ def drawSquare(self, g):
 #    Long and dumb!
     
 #Triangle
+class Triangle(ScreenObject):
+    def getCollisionVector(self, obj):
+        directionVector = obj.position - self.position
+        dist = _distance(self,obj)
+        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * 15
+        return collisionVector
+
+
+
+
+
+
 def triangle(position):
     return ScreenObject(updater = triangleUpdater, types = {"position": p2Type},
         name = 'Triangle', init = triangleInit, drawer = drawTriangle, position = position)
 def triangleInit(so, params):
     so.position = params["position"]
+    
 def triangleUpdater(self):
     screenObjects.append(self)
 #def drawTriangle(g, p):
