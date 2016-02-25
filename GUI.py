@@ -1,7 +1,8 @@
 # Java functionality 
 
 #-----  imports  -----#
-from java.awt import Color
+#from java.awt import Color
+import java.awt.Color as JavaColor
 from java.awt.event import ActionListener
 from java.awt.event import KeyAdapter
 from java.awt.event import MouseAdapter
@@ -10,9 +11,11 @@ from java.lang import System
 from javax.swing import JFrame
 from javax.swing import JPanel
 from javax.swing import Timer
+from pythonfrp.Numerics import *
 
 from pythonfrp.Engine import *
 from Reactive2D import *
+from pythonfrp.Color import *
 
 import random
 
@@ -102,13 +105,13 @@ class Example(JFrame, ActionListener):
         self.xp=0
         self.yp=0
         self.canvas=Canvas(lambda g:self.mypaint(g), lambda x, y: self.myclick(x, y), lambda x, y: self.my_move(x, y))
-        self.canvas.setBackground(Color(200, 200, 100))
+        self.canvas.setBackground(JavaColor(200, 200, 100))
         self.getContentPane().add(self.canvas)
         self.setTitle("Test")
         self.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
         self.setSize(300, 300)
         self.setLocationRelativeTo(None)
-        self.setBackground(Color(255, 255, 255))
+        self.setBackground(JavaColor(255, 255, 255))
         self.setVisible(True)
         self.timer=Timer(50, self)
         self.timer.start()

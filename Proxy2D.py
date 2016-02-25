@@ -8,6 +8,8 @@ from java.lang import Math
 from pythonfrp.Engine import *
 from Globals2D import *
 from Shapes import *
+from pythonfrp.Numerics import *
+from pythonfrp.Color import *
 
 from jarray import array
 
@@ -17,10 +19,17 @@ class ScreenObject(Proxy.Proxy):
 #        init(self, params)
         
     
-    def __init__ (self, updater=None, types={}, name='', init=None, drawer = None, ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
-        init(self, params)    
         self._drawer = drawer
+        self.position = position
+        self._zDepth = zDepth
+        self._zLayer = zLayer
+        self.color = color
+        self.size = size
+        self.rotation = rotation
+        self.skew = skew
+        self.texture = texture
         
     def _draw(self, g):
         #print("Inside _draw")
