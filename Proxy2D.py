@@ -42,6 +42,7 @@ from jarray import array
         
 class ScreenObject(object):
     
+    #review this constructor for stuff.
     def __init__ (self, updater = None, types = {}, name = '', init = None, ** params):
         self.updater = updater
         self.types = types
@@ -52,7 +53,17 @@ class ScreenObject(object):
         self._drawer = drawer
         
     def getCollisionVector(self, object):
-        pass
+        pass #To be dicided by its subclasses
+    
+    def _applyTexture(self, method):
+        pass #A placeholder pass.  I'm not sure if the method could be generizable or if it will have to be handled by each shape individually.
+    #A crop won't, but if we want to stretch/compress the image to fit...we may.
+    
+    def draw(self, g):
+        pass #Is there a general way to draw a screen object?  We''ll seeee.
+    
+    def update(self):
+        screenObjects.append(self);
 
 def _distance(o1, o2):
         return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
