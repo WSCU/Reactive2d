@@ -30,22 +30,10 @@ class ScreenObject(Proxy.Proxy):
         self.rotation = rotation
         self.skew = skew
         self.texture = texture
-        
-        def _draw(self, g):
-             self._drawer = drawer
-    
-        #Anthoney's part
-class ScreenObject(object):
-    
-    #review this constructor for stuff.
-    def __init__ (self, updater = None, types = {}, name = '', init = None, ** params):
-        self.updater = updater
-        self.types = types
-        self.name = name
-        self.init = init
+        #print "Hello world!"
         
     def _draw(self, g):
-        pass #Is there a general way to draw a screen object?  We''ll seeee.
+        self._drawer(self, g)
         
     def getCollisionVector(self, object):
         pass #To be dicided by its subclasses
