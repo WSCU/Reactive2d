@@ -121,7 +121,7 @@ class Example(JFrame, ActionListener):
     def actionPerformed(self, e):
         currentTime=System.currentTimeMillis()
         if ((currentTime-startTime[0]) % 75 == 0):
-            balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
+            balls.append(Circle(p2(random.randrange(50,250),270-localTime*100), 10))
         del screenObjects[:]
 #        print(currentTime-startTime[0])
 #        print('Objects: ' + str(Globals.worldObjects))

@@ -19,9 +19,8 @@ class ScreenObject(Proxy.Proxy):
 #        init(self, params)
         
   #Jay's part  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
-        self._drawer = drawer
         self.position = position
         self._zDepth = zDepth
         self._zLayer = zLayer
@@ -33,7 +32,7 @@ class ScreenObject(Proxy.Proxy):
         #print "Hello world!"
         
     def _draw(self, g):
-        self._drawer(self, g)
+        pass #Every Screenobject should know how to draw itself.  It doesn't need a drawer, that's just weird and unnecessary delegation
         
     def getCollisionVector(self, object):
         pass #To be dicided by its subclasses
