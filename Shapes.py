@@ -6,12 +6,25 @@ import java.awt.Color as JavaColor
 #import math.pi as pi
     
 
-#This user level
+#On the user level, they need a consistent way to say "this is a shape"
+#When making a shape, the user NEEDS to give it a position, size, and a texture (solid color is an option)
+#shape(position, size, texture, (opt) stretch(es), (opt) rotation)
+#zDepth, zLayer, and anything else that isn't handled by the user is handled automatically (obviously)
+
+#To make it easier on the user, we want our coordinates to be Quadrant I of the
+#   Cartesian Plane, the origin being at the bottom left of the screen.  So all
+#   we have to do when the user inputs coordinates is invert the Y axis and set
+#   the draw point to the height of the object.  The grab point, or position 
+#   reference, will always be centered in the object.We also want them to input 
+#   their rotation in degrees, so we'll need to convert those to radians if we
+#   want to use them.
+
+
 #Circle
 class Circle(ScreenObject):
     
-    def __init__(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
-        ScreenObject(types = {}, name = 'Circle', position = position, 
+    def __init__(self,position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
+        ScreenObject(self, types = {}, name = 'Circle', position = position, 
         zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture)
 
     def _draw(self,g):
@@ -22,7 +35,7 @@ class Circle(ScreenObject):
     
     def getCollisionVector(self, obj):
         directionVector = obj.position - self.position
-        dist = _distance(self,obj)
+        dist = _distance(obj)
         directionUnit = (directionVector.x / dist, directionVector.y / dist)
         collisionVector = directionUnit * radius
         return collisionVector
@@ -33,8 +46,8 @@ class Circle(ScreenObject):
 #Square
 class Square(ScreenObject):
     
-    def __init__(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
-        ScreenObject(types = {}, name = 'Square',
+    def __init__(self,position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
+        ScreenObject(self, types = {}, name = 'Square',
         position = position, 
         zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture) 
     
@@ -59,8 +72,8 @@ class Square(ScreenObject):
 #Triangle
 class Triangle(ScreenObject):
     
-    def __int__(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
-        ScreenObject(types = {},
+    def __int__(self,position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
+        ScreenObject(self, types = {},
         name = 'Triangle', position = position, zDepth = zDepth, 
         zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture)
     
