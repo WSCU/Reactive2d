@@ -5,6 +5,12 @@ from Proxy2D import *
 import java.awt.Color as JavaColor
 #import math.pi as pi
     
+def colorToJava(c):
+    jr = int(c.r * 255) 
+    jg = int(c.g * 255)
+    jb = int(c.b * 255)
+    jc = JavaColor(jr, jg, jb)
+    return jc
 
 #On the user level, they need a consistent way to say "this is a shape"
 #When making a shape, the user NEEDS to give it a position, size, and a texture (solid color is an option)
@@ -18,13 +24,6 @@ import java.awt.Color as JavaColor
 #   reference, will always be centered in the object.We also want them to input 
 #   their rotation in degrees, so we'll need to convert those to radians if we
 #   want to use them.
-
-def colorToJava(c):
-    jr = int(c.r * 255) 
-    jg = int(c.g * 255)
-    jb = int(c.b * 255)
-    jc = JavaColor(jr, jg, jb)
-    return jc
 
 def circle(position, size = 1, texture = "None", skew = 1, rotation = 0):
     return Circle(position = position, size = size, rotation = rotation, skew = skew, texture = texture)
@@ -97,7 +96,7 @@ class Triangle(ScreenObject):
         xs = array([int(p.x), int(p.x-Math.sqrt((r*r)/2)), int(p.x+Math.sqrt((r*r)/2))], 'i')
         ys = array([int(p.y-25), int(p.y+Math.sqrt((r*r)/2)), int(p.y+Math.sqrt((r*r)/2))], 'i')
         g.fillPolygon(xs, ys, 3)
-    
+
     def getCollisionVector(self, obj):
         directionVector = obj.position - self.position
         dist = _distance(self,obj)
