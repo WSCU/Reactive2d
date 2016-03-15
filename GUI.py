@@ -76,7 +76,7 @@ class Canvas(JPanel):
         JPanel.paint(self, g)
         self.drawer(g)
 
- 
+
 # This creates the drawing frame (Example is a stupid name ...)
  
 class Example(JFrame, ActionListener):
@@ -120,8 +120,8 @@ class Example(JFrame, ActionListener):
 
     def actionPerformed(self, e):
         currentTime=System.currentTimeMillis()
-        if ((currentTime-startTime[0]) % 75 == 0):
-            balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
+#        if ((currentTime-startTime[0]) % 75 == 0):
+#            balls.append(circle(p2(random.randrange(50,250),270-localTime*100),10 , "None"))
         del screenObjects[:]
 #        print(currentTime-startTime[0])
 #        print('Objects: ' + str(Globals.worldObjects))
@@ -131,6 +131,8 @@ class Example(JFrame, ActionListener):
  
 mouse = ObserverF(lambda x: mouse_pos[0], type = numType)
 
+
+    
  # This is the start function that initializes the reactive engine and then starts the animation
 def start():
     print("Starting...")
