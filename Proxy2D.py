@@ -11,6 +11,7 @@ from jarray import array
 
 
 class ScreenObject(Proxy.Proxy):
+
  
     def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', position = p2(0,0), zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
@@ -48,4 +49,5 @@ class ScreenObject(Proxy.Proxy):
         r2 = obj2.getCollisionVector(self)
         #we know now where one object is relative to the other and now want to know when these points cross
         return _distance(self.postion + r1 , obj2.postition + r2) <= 0
+
 
