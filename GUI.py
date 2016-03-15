@@ -1,7 +1,8 @@
 # Java functionality 
 
 #-----  imports  -----#
-from java.awt import Color
+#from java.awt import Color
+import java.awt.Color as JavaColor
 from java.awt.event import ActionListener
 from java.awt.event import KeyAdapter
 from java.awt.event import MouseAdapter
@@ -10,9 +11,11 @@ from java.lang import System
 from javax.swing import JFrame
 from javax.swing import JPanel
 from javax.swing import Timer
+from pythonfrp.Numerics import *
 
 from pythonfrp.Engine import *
 from Reactive2D import *
+from pythonfrp.Color import *
 
 import random
 
@@ -73,7 +76,7 @@ class Canvas(JPanel):
         JPanel.paint(self, g)
         self.drawer(g)
 
- 
+
 # This creates the drawing frame (Example is a stupid name ...)
  
 class Example(JFrame, ActionListener):
@@ -83,7 +86,14 @@ class Example(JFrame, ActionListener):
 
 # Paint all of the objects in screenObjects
     def mypaint(self, g):
-        for object in screenObjects:
+        layerArray = [[] for i in range (100)] #Creating a 100-item array for us to work with.
+	for object in screenObjects:
+            layerArray[int(min(object._get("zLayer"), 99))].append(object) #This puts the objects onto their designated layer.
+        newArray = [] #We now want to compress our scattered 2d-array into a 1d-array.
+	for subArray in layerArray: #It's called Radix sorting.
+            newArray.extend(subArray) #It's efficient!
+	#screenObjects = newArray #Turns out you can't actually do this, and I have no idea why.
+        for object in newArray: #Instead of going through screenObjects, we go through newArray, which is sorted by layer.
             object._draw(g) #Now calls a _draw method on each object, instead of just having a bunch of lambdas in screenObjects.
             
 # Add an external event on a mouse click
@@ -102,13 +112,13 @@ class Example(JFrame, ActionListener):
         self.xp=0
         self.yp=0
         self.canvas=Canvas(lambda g:self.mypaint(g), lambda x, y: self.myclick(x, y), lambda x, y: self.my_move(x, y))
-        self.canvas.setBackground(Color(200, 200, 100))
+        self.canvas.setBackground(JavaColor(200, 200, 100))
         self.getContentPane().add(self.canvas)
         self.setTitle("Test")
         self.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
         self.setSize(300, 300)
         self.setLocationRelativeTo(None)
-        self.setBackground(Color(255, 255, 255))
+        self.setBackground(JavaColor(255, 255, 255))
         self.setVisible(True)
         self.timer=Timer(50, self)
         self.timer.start()
@@ -117,8 +127,8 @@ class Example(JFrame, ActionListener):
 
     def actionPerformed(self, e):
         currentTime=System.currentTimeMillis()
-        if ((currentTime-startTime[0]) % 75 == 0):
-            balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
+        #if ((currentTime-startTime[0]) % 75 == 0):
+        #    balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
         del screenObjects[:]
 #        print(currentTime-startTime[0])
 #        print('Objects: ' + str(Globals.worldObjects))
@@ -128,6 +138,8 @@ class Example(JFrame, ActionListener):
  
 mouse = ObserverF(lambda x: mouse_pos[0], type = numType)
 
+
+    
  # This is the start function that initializes the reactive engine and then starts the animation
 def start():
     print("Starting...")

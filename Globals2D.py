@@ -1,4 +1,5 @@
 from pythonfrp.Engine import *
+from pythonfrp.StaticNumerics import *
 
 
 #--- all the tings that appear on screen as programs runs, a bunch of lambdas  ---#
