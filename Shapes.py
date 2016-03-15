@@ -19,23 +19,35 @@ import java.awt.Color as JavaColor
 #   their rotation in degrees, so we'll need to convert those to radians if we
 #   want to use them.
 
+def colorToJava(c):
+    jr = int(c.r * 255) 
+    jg = int(c.g * 255)
+    jb = int(c.b * 255)
+    jc = JavaColor(jr, jg, jb)
+    return jc
+
+def circle(position, size = 1, texture = "None", skew = 1, rotation = 0):
+    return Circle(position = position, size = size, rotation = rotation, skew = skew, texture = texture)
 
 #Circle
 class Circle(ScreenObject):
     
-    def __init__(self,position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
-        ScreenObject(self, types = {}, name = 'Circle', position = position, 
-        zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture)
+    def __init__(self,position = p2(0,0), zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
+        ScreenObject.__init__(self, types = {}, name = 'Circle', position = position, 
+        zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture)
+        #print(str(color.r))
 
     def _draw(self,g):
-        g.setColor(self.color)
+        #print(str(self._get("color")))
+        c = colorToJava(self._get("color"))
+        g.setColor(c)
         p = self._get("position")
         r = self._get("size")
         g.fillOval(int(p.x-r), int(p.y-r), int(2*r), int(2*r))
     
     def getCollisionVector(self, obj):
         directionVector = obj.position - self.position
-        dist = _distance(obj)
+        dist = self._distance(obj)
         directionUnit = (directionVector.x / dist, directionVector.y / dist)
         collisionVector = directionUnit * radius
         return collisionVector
@@ -46,14 +58,14 @@ class Circle(ScreenObject):
 #Square
 class Square(ScreenObject):
     
-    def __init__(self,position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
+    def __init__(self,position = p2(0,0), zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
         ScreenObject(self, types = {}, name = 'Square',
         position = position, 
-        zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture) 
+        zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture) 
     
     def _draw(self, g):
-        #print("Inside drawSquare")
-        g.setColor(self.color)
+        c = colorToJava(self._get("color"))
+        g.setColor(c)
         p = self._get("position")
         w = self._get("size")
         h = self._get("size")
@@ -72,14 +84,14 @@ class Square(ScreenObject):
 #Triangle
 class Triangle(ScreenObject):
     
-    def __int__(self,position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
+    def __int__(self,position = p2(0,0), zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None"):
         ScreenObject(self, types = {},
-        name = 'Triangle', position = position, zDepth = zDepth, 
-        zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture)
+        name = 'Triangle', position = position, zLayer = zLayer, color = color,
+        size = size, rotation = rotation, skew = skew, texture = texture)
     
     def _draw(self,g):
-        #print("Inside drawTriangle")
-        g.setColor(self.color)
+        c = colorToJava(self._get("color"))
+        g.setColor(c)
         r = self._get("size");
         p = self._get("position")
         xs = array([int(p.x), int(p.x-Math.sqrt((r*r)/2)), int(p.x+Math.sqrt((r*r)/2))], 'i')

@@ -4,15 +4,19 @@ from pythonfrp import *
 from pythonfrp.Numerics import *
  
 
-Square(p2(25,25))
+#Square(p2(25,25))
 #circle(integral(mouse-p2(100,100),p2(100,100)),time*10)
-#circle(p2(10,time*20), 10)
 
-paddle = [p2(150,50)]
+pant = circle(position = p2(10,10 + time),size = 10)
+bant = circle(position = p2(10,50 - time),size = 10)
+#if pant._collides(bant):
+#    print "yoshi"
+
+#paddle = [p2(150,50)]
 #triangle(integral(mouse-p2(100,100),p2(100,100)))
-Square(paddle[0], size = 50, skew = 0.2)
+#Square(paddle[0], size = 50, skew = 0.2)
 
-Triangle(integral(mouse-p2(100,100),p2(100,100)))
+#Triangle(integral(mouse-p2(100,100),p2(100,100)))
 
 
 #def makeSquare(m,v):
@@ -32,6 +36,6 @@ def keyPressed(self, k):
  
  #react(kT,typeKey)
  
-react(kT(), keyPressed)
+#react(kT(), keyPressed)
 
 start()

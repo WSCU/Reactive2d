@@ -8,18 +8,22 @@ from pythonfrp.Numerics import *
 from pythonfrp.Color import *
 from jarray import array
 
+
+
 class ScreenObject(Proxy.Proxy):
  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', position = p2(0,0), zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
         self.position = position
-        self._zDepth = zDepth
-        self._zLayer = zLayer
+        self.zLayer = zLayer
         self.color = color
         self.size = size
         self.rotation = rotation
         self.skew = skew
         self.texture = texture
+        self._updater = updater
+#        self.x = self._get("position").x
+#        self.y = self._get("position").y
         #print "Hello world!"
         
     def _draw(self, g):
@@ -34,13 +38,14 @@ class ScreenObject(Proxy.Proxy):
     
     def update(self):
         screenObjects.append(self);
+        
+    def _distance(self,p1, p2):
+        return Math.sqrt(Math.pow(p2.x - p1.x,2) + Math.pow(p2.y - p1.y, 2))
+        
+        
+    def _collides(self, obj2):
+        r1 = self.getCollisionVector(obj2) 
+        r2 = obj2.getCollisionVector(self)
+        #we know now where one object is relative to the other and now want to know when these points cross
+        return _distance(self.postion + r1 , obj2.postition + r2) <= 0
 
-def _distance(o1, o2):
-        return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
-        
-        
-def _collides(obj1, obj2):
-    r1 = obj1.getCollisionVector(obj2) 
-    r2 = obj2.getCollisionVector(obj1)
-    #we know now where one object is relative to the other and now want to know when these points cross
-    return distance(obj1.postion + r1 , obj2.postition + r2) <= 0
