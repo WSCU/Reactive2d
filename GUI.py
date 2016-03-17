@@ -12,6 +12,16 @@ from javax.swing import JFrame
 from javax.swing import JPanel
 from javax.swing import Timer
 from pythonfrp.Numerics import *
+from java.awt import Dimension
+from java.awt import GradientPaint
+from java.awt import Graphics
+from java.awt import Graphics2D
+from java.awt.event import WindowAdapter
+from java.awt.event import WindowEvent
+from java.awt.geom import Ellipse2D
+from java.awt.geom import Rectangle2D
+from javax.swing import JApplet
+from javax.swing import JFrame
 
 from pythonfrp.Engine import *
 from Reactive2D import *
@@ -75,8 +85,14 @@ class Canvas(JPanel):
     def paint(self, g):
         JPanel.paint(self, g)
         self.drawer(g)
+        #blueToWhite = GradientPaint(10, 10, JavaColor(0,0,255), 100, 10, JavaColor(255,255,255));
+        #g.setColor(JavaColor(255,255,255));
+        #g.setPaint(blueToWhite);
+        #g.drawOval(10, 10, 100, 100);
+        #g.fill(Ellipse2D.Double(10, 10, 100, 100));
+        #g.fill(Rectangle2D.Double(5, 150, 200, 30));
 
-
+ 
 # This creates the drawing frame (Example is a stupid name ...)
  
 class Example(JFrame, ActionListener):
@@ -88,7 +104,8 @@ class Example(JFrame, ActionListener):
     def mypaint(self, g):
         layerArray = [[] for i in range (100)] #Creating a 100-item array for us to work with.
 	for object in screenObjects:
-            layerArray[int(min(object._get("zLayer"), 99))].append(object) #This puts the objects onto their designated layer.
+            layerIndex = int(min(object._zLayer, 99)) #This puts the objects onto their designated layer.
+            layerArray[layerIndex].insert(int(min(object._get("zDepth"), len(layerArray[layerIndex]))) ,object) 
         newArray = [] #We now want to compress our scattered 2d-array into a 1d-array.
 	for subArray in layerArray: #It's called Radix sorting.
             newArray.extend(subArray) #It's efficient!
@@ -138,8 +155,6 @@ class Example(JFrame, ActionListener):
  
 mouse = ObserverF(lambda x: mouse_pos[0], type = numType)
 
-
-    
  # This is the start function that initializes the reactive engine and then starts the animation
 def start():
     print("Starting...")
