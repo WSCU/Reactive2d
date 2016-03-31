@@ -30,7 +30,7 @@ class ScreenObject(Proxy.Proxy):
     def _draw(self, g):
         pass #Every Screenobject should know how to draw itself.  It doesn't need a drawer, that's just weird and unnecessary delegation
         
-    def getCollisionVector(self, object):
+    def _getCollisionVector(self, object):
         pass #To be dicided by its subclasses
     
     def _applyTexture(self, method):
@@ -45,9 +45,9 @@ class ScreenObject(Proxy.Proxy):
         
         
     def _collides(self, obj2):
-        r1 = self.getCollisionVector(obj2) 
-        r2 = obj2.getCollisionVector(self)
+        r1 = self._getCollisionVector(obj2) 
+        r2 = obj2._getCollisionVector(self)
         #we know now where one object is relative to the other and now want to know when these points cross
-        return _distance(self.postion + r1 , obj2.postition + r2) <= 0
+        return self._distance(self.postion + r1 , obj2.postition + r2) <= 0
 
 

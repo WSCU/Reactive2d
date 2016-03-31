@@ -5,7 +5,7 @@ from Proxy2D import *
 import java.awt.Color as JavaColor
 #import math.pi as pi
     
-def colorToJava(c):
+def _colorToJava(c):
     jr = int(c.r * 255) 
     jg = int(c.g * 255)
     jb = int(c.b * 255)
@@ -38,17 +38,19 @@ class Circle(ScreenObject):
 
     def _draw(self,g):
         #print(str(self._get("color")))
-        c = colorToJava(self._get("color"))
+        c = _colorToJava(self._get("color"))
         g.setColor(c)
         p = self._get("position")
         r = self._get("size")
         g.fillOval(int(p.x-r), int(p.y-r), int(2*r), int(2*r))
     
-    def getCollisionVector(self, obj):
-        directionVector = obj.position - self.position
-        dist = self._distance(obj)
-        directionUnit = (directionVector.x / dist, directionVector.y / dist)
-        collisionVector = directionUnit * radius
+    def _getCollisionVector(self, obj):
+        pon1 = self._get("position")
+        pon2 = obj._get("position")
+        directionVector = pon2 - pon1
+        dist = self._distance(pon1,pon2)
+        directionUnit = p2(directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * self.radius
         return collisionVector
 
 
@@ -63,7 +65,7 @@ class Square(ScreenObject):
         zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture) 
     
     def _draw(self, g):
-        c = colorToJava(self._get("color"))
+        c = _colorToJava(self._get("color"))
         g.setColor(c)
         p = self._get("position")
         w = self._get("size")
@@ -71,10 +73,12 @@ class Square(ScreenObject):
         g.fillRect(int(p.x-(w/2)), int(p.y-(h/2)), w, h)
     
     def getCollisionVector(self, obj):
-        directionVector = obj.position - self.position
-        dist = _distance(self,obj)
-        directionUnit = (directionVector.x / dist, directionVector.y / dist)
-        collisionVector = directionUnit * width
+        pon1 = self._get("position")
+        pon2 = obj._get("position")
+        directionVector = pon2 - pon1
+        dist = _distance(pon1,pon2)
+        directionUnit = p2(directionVector.x / dist, directionVector.y / dist)
+        collisionVector = directionUnit * Math.max(width, height)
         return collisionVector
     
  
@@ -89,17 +93,19 @@ class Triangle(ScreenObject):
         size = size, rotation = rotation, skew = skew, texture = texture)
     
     def _draw(self,g):
-        c = colorToJava(self._get("color"))
+        c = _colorToJava(self._get("color"))
         g.setColor(c)
-        r = self._get("size");
+        r = self._get("size")
         p = self._get("position")
         xs = array([int(p.x), int(p.x-Math.sqrt((r*r)/2)), int(p.x+Math.sqrt((r*r)/2))], 'i')
         ys = array([int(p.y-25), int(p.y+Math.sqrt((r*r)/2)), int(p.y+Math.sqrt((r*r)/2))], 'i')
         g.fillPolygon(xs, ys, 3)
 
     def getCollisionVector(self, obj):
-        directionVector = obj.position - self.position
-        dist = _distance(self,obj)
-        directionUnit = (directionVector.x / dist, directionVector.y / dist)
+        pon1 = self._get("position")
+        pon2 = obj._get("position")
+        directionVector = pon2 - pon1
+        dist = _distance(pon1,pon2)
+        directionUnit = p2(directionVector.x / dist, directionVector.y / dist)
         collisionVector = directionUnit * 15
         return collisionVector

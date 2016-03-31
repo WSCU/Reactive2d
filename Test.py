@@ -10,8 +10,8 @@ from pythonfrp.Numerics import *
 
 pant = circle(position = p2(10,10 + time),size = 10)
 bant = circle(position = p2(10,50 - time),size = 10)
-#if pant._collides(bant):
-#    print "yoshi"
+if pant._collides(bant):
+    print "yoshi"
 
 #paddle = [p2(150,50)]
 #triangle(integral(mouse-p2(100,100),p2(100,100)))
