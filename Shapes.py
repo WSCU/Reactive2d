@@ -26,25 +26,45 @@ from javax.swing import JFrame
 #[startP2, startColor, endP2, endColor]
 #where startColor and endColor are assumed to be pythonFRP colors.
 #If there aren't enough arguments, we skip all the gradient crap and fill it with a solid color.
-def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", gradientInfo = []):
+def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red):
     return ScreenObject(types = {}, name = 'Circle',  drawer = drawCircle, position = position, 
-        zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture, gradientInfo = gradientInfo)
+        zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, 
+        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2)
 
 def drawCircle(self, g):
     
     p = self._get("position")
     h = int((self._get("size") * self._get("skew")))
     w = self._get("size")
-    grad = self._get("gradientInfo")
-    shape = Ellipse2D.Double(int(p.x-(w/2)), int(p.y-(h/2)), w, h)
-    g.rotate(self._get("rotation"))
-    if len(grad) != 4:
+    theta = self._get("rotation")
+    useGrad = self._get("useGrad")
+    g.rotate(theta)
+    
+    if(theta != 0):
+        r = sqrt((p.x * p.x) + (p.y * p.y))
+        oldTheta = atan2(p.y, p.x)
+        newTheta = oldTheta - theta
+        x = r * cos(newTheta)
+        y = r * sin(newTheta)
+    else:
+        x = p.x
+        y = p.y
+        
+    shape = Ellipse2D.Double(int(x-(w/2)), int(y-(h/2)), w, h)
+    if not useGrad:
         g.setPaint(toJavaColor(self._get("color")))
         g.fill(shape);
     else:
-        theGradient = GradientPaint(grad[0].x, grad[0].y, toJavaColor(grad[1]), grad[2].x, grad[2].y, toJavaColor(grad[3]));
+        rGradx1 = x + self._get("gradp1").x
+        rGradx2 = x + self._get("gradp2").x
+        rGrady1 = y + self._get("gradp1").y
+        rGrady2 = y + self._get("gradp2").y 
+        gradc1 = self._get("gradc1")
+        gradc2 = self._get("gradc2")
+        theGradient = GradientPaint(rGradx1, rGrady1, toJavaColor(gradc1), rGradx2, rGrady2, toJavaColor(gradc2));
         g.setPaint(theGradient);
         g.fill(shape);
+    g.rotate(- self._get("rotation"))
     
 #A
 class Circle(ScreenObject):
@@ -61,25 +81,45 @@ class Circle(ScreenObject):
 #Square
 
 #J
-def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", gradientInfo = []):
+def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red):
 
     return ScreenObject(types = {}, name = 'Square', drawer = drawSquare, position = position, 
-        zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture, gradientInfo = gradientInfo) 
+        zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, 
+        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2) 
 
 def drawSquare(self, g):
     h = int((self._get("size") * self._get("skew")))
     p = self._get("position")
     w = self._get("size")
-    grad = self._get("gradientInfo")
-    shape = Rectangle2D.Double(int(p.x-(w/2)), int(p.y-(h/2)), w, h)
-    g.rotate(self._get("rotation"))
-    if len(grad) != 4:
+    useGrad = self._get("useGrad")
+    theta = self._get("rotation")
+    g.rotate(theta)
+    
+    if(theta != 0):
+        r = sqrt((p.x * p.x) + (p.y * p.y))
+        oldTheta = atan2(p.y, p.x)
+        newTheta = oldTheta - theta
+        x = r * cos(newTheta)
+        y = r * sin(newTheta)
+    else:
+        x = p.x
+        y = p.y
+        
+    shape = Rectangle2D.Double(int(x-(w/2)), int(y-(h/2)), w, h)
+    if not useGrad:
         g.setPaint(toJavaColor(self._get("color")))
         g.fill(shape);
     else:
-        theGradient = GradientPaint(grad[0].x, grad[0].y, toJavaColor(grad[1]), grad[2].x, grad[2].y, toJavaColor(grad[3]));
+        rGradx1 = x + self._get("gradp1").x
+        rGradx2 = x + self._get("gradp2").x
+        rGrady1 = y + self._get("gradp1").y
+        rGrady2 = y + self._get("gradp2").y 
+        gradc1 = self._get("gradc1")
+        gradc2 = self._get("gradc2")
+        theGradient = GradientPaint(rGradx1, rGrady1, toJavaColor(gradc1), rGradx2, rGrady2, toJavaColor(gradc2));
         g.setPaint(theGradient);
         g.fill(shape);
+    g.rotate(- self._get("rotation"))
 #A
 class Square(ScreenObject):
     def getCollisionVector(self, obj):
@@ -95,10 +135,11 @@ class Square(ScreenObject):
 #Triangle
 
 #J
-def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", gradientInfo = []):
+def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red):
     return ScreenObject(types = {},
         name = 'Triangle', drawer = drawTriangle, position = position, zDepth = zDepth, 
-        zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, texture = texture, gradientInfo = gradientInfo)
+        zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, 
+        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2)
         
 def drawTriangle(self, g):
     #print("Inside drawTriangle")

@@ -104,14 +104,23 @@ class Example(JFrame, ActionListener):
     def mypaint(self, g):
         layerArray = [[] for i in range (100)] #Creating a 100-item array for us to work with.
 	for object in screenObjects:
-            layerIndex = int(min(object._zLayer, 99)) #This puts the objects onto their designated layer.
-            layerArray[layerIndex].insert(int(min(object._get("zDepth"), len(layerArray[layerIndex]))) ,object) 
+            layerIndex = int(min(object._zLayer, 99)) #This specifies the layer that the object will be headed for...
+            layerLoc = 0
+            myDepth = object._get("zDepth")
+            for compObject in layerArray[layerIndex]: #but first, we need to find the right place in that layer to put our object.
+                if (myDepth > compObject._get("zDepth")):
+                    layerLoc = layerLoc + 1
+                else:
+                    break
+            layerArray[layerIndex].insert(layerLoc ,object)
         newArray = [] #We now want to compress our scattered 2d-array into a 1d-array.
 	for subArray in layerArray: #It's called Radix sorting.
-            newArray.extend(subArray) #It's efficient!
+            newArray.extend(subArray)
 	#screenObjects = newArray #Turns out you can't actually do this, and I have no idea why.
         for object in newArray: #Instead of going through screenObjects, we go through newArray, which is sorted by layer.
             object._draw(g) #Now calls a _draw method on each object, instead of just having a bunch of lambdas in screenObjects.
+            
+        
             
 # Add an external event on a mouse click
     def myclick(self, x, y):

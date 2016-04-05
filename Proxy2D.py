@@ -19,7 +19,7 @@ class ScreenObject(Proxy.Proxy):
 #        init(self, params)
         
     #Jay's part  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", gradientInfo = [], ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
         self._drawer = drawer
         self.position = position
@@ -30,7 +30,12 @@ class ScreenObject(Proxy.Proxy):
         self.rotation = rotation
         self.skew = skew
         self.texture = texture
-        self.gradientInfo = gradientInfo 
+        self.useGrad = useGrad
+        self.gradp1 = gradp1
+        self.gradp2 = gradp2
+        self.gradc1 = gradc1
+        self.gradc2 = gradc2
+        #self.gradientInfo = gradientInfo
         #print "Hello world!"
         
     def _draw(self, g):
