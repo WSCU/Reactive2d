@@ -27,10 +27,10 @@ from javax.swing import JFrame
 #[startP2, startColor, endP2, endColor]
 #where startColor and endColor are assumed to be pythonFRP colors.
 #If there aren't enough arguments, we skip all the gradient crap and fill it with a solid color.
-def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red):
+def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0):
     return ScreenObject(types = {}, name = 'Circle',  drawer = drawCircle, position = position, 
         zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, 
-        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2)
+        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration)
 
 def drawCircle(self, g):
     
@@ -89,11 +89,11 @@ class Circle(ScreenObject):
 #Square
 
 #J
-def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red):
+def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0):
 
     return ScreenObject(types = {}, name = 'Square', drawer = drawSquare, position = position, 
         zDepth = zDepth, zLayer = zLayer, color = color, size = size, rotation = rotation, skew = skew, 
-        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2) 
+        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration) 
 
 def drawSquare(self, g):
     h = int((self._get("size") * self._get("skew")))

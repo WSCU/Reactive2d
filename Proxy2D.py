@@ -19,7 +19,7 @@ class ScreenObject(Proxy.Proxy):
 #        init(self, params)
         
     #Jay's part  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
         self._drawer = drawer
         self.position = position
@@ -35,6 +35,9 @@ class ScreenObject(Proxy.Proxy):
         self.gradp2 = gradp2
         self.gradc1 = gradc1
         self.gradc2 = gradc2
+        self.duration = duration
+        if duration > 0:
+            react(self, delay(duration), exitScene)
         #self.gradientInfo = gradientInfo
         #print "Hello world!"
         
@@ -49,7 +52,11 @@ class ScreenObject(Proxy.Proxy):
     #A crop won't, but if we want to stretch/compress the image to fit...we may.
     
     def update(self):
+        print("UPDOOT")
         screenObjects.append(self);
+        if self.duration > 0:
+            print("REMOFE")
+            react(self, delay(duration), exitScene)
 
 def _distance(o1, o2):
         return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
