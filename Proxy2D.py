@@ -10,6 +10,12 @@ from Globals2D import *
 from Shapes import *
 from pythonfrp.Numerics import *
 from pythonfrp.Color import *
+from java.awt import Graphics
+from java.awt import Graphics2D
+from java.awt.geom import Area
+from java.awt.geom import Ellipse2D
+from java.awt.geom import Rectangle2D
+from java.awt.geom import AffineTransform
 
 from jarray import array
 
@@ -19,16 +25,17 @@ class ScreenObject(Proxy.Proxy):
 #        init(self, params)
         
     #Jay's part  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, size = 10, rotation = 0, skew = 1, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, height = 10, width = 10, rotation = 0, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, grab = p2(0,0),  ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
         self._drawer = drawer
         self.position = position
         self._zLayer = zLayer
         self.zDepth = zDepth
         self.color = color
-        self.size = size
+        self.scaler = scaler
+        self.height = height
+        self.width = width
         self.rotation = rotation
-        self.skew = skew
         self.texture = texture
         self.useGrad = useGrad
         self.gradp1 = gradp1
@@ -36,6 +43,7 @@ class ScreenObject(Proxy.Proxy):
         self.gradc1 = gradc1
         self.gradc2 = gradc2
         self.duration = duration
+        self.grab = grab
         if duration > 0:
             react(self, delay(duration), exitScene)
         #self.gradientInfo = gradientInfo
@@ -57,6 +65,25 @@ class ScreenObject(Proxy.Proxy):
         if self.duration > 0:
             print("REMOFE")
             react(self, delay(duration), exitScene)
+            
+    def _getArea(self):
+        h = int((self._get("scaler") * self._get("height")))
+        w = int((self._get("scaler") * self._get("width")))
+        p = self._get("position")
+        theta = self._get("rotation")
+        ar = Area(Rectangle2D.Double(-1, -1, 2, 2))
+        g = AffineTransform()
+        g.translate(p.x, p.y)
+        g.rotate(theta)
+        g.scale(w/2, h/2)
+        ar.transform(g)
+        return ar
+    def _touches(self, testObj, trace = False):
+        if(trace):
+            print("pos = " + self._get("position"))
+        ar1 = self._getArea()
+        ar2 = testObj._getArea()
+        return ar1.intersects(ar2.getBounds2D())
 
 def _distance(o1, o2):
         return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
@@ -127,16 +154,16 @@ def _collides(obj1, obj2):
 #            if trace:
  #               print("Touch: " + repr(self) + " " + repr(handle))
 #            #print (repr(self._cRadius))
-#            #print (repr(self.get("size")))
+#            #print (repr(self.get("scaler")))
 #            
 #            #---  catches zombies  ???  (other objects rely on deleted objects so they cant be deleted permanently)---#
  #           if not self._alive or not handle._alive:
  #               return False
 #            
 #            #---  me vs you position  ---#
-#            mr = self._cRadius * self._get("size")
+#            mr = self._cRadius * self._get("scaler")
 #            mp = self._get("position") + p3(0, 0, 0)
-#            yr = handle._cRadius * handle._get("size")
+#            yr = handle._cRadius * handle._get("scaler")
 #            yp = handle._get("position") + p3(0, 0, 0)
         
         #-----  Circle Handling  -----#    
@@ -160,8 +187,8 @@ def _collides(obj1, obj2):
  #           if d > mr + yr:
  #                        return False
  #                    else:
- #                        cb = yp.z + handle._get("size") * handle._cFloor
- #                        ct = yp.z + handle._get("size") * handle._cTop
+ #                        cb = yp.z + handle._get("scaler") * handle._cFloor
+ #                        ct = yp.z + handle._get("scaler") * handle._cTop
  #                        sb = mp.z-mr
  #                        st = mp.z + mr
  #                        # print str(cb) + " " + str(ct) + " " + str(sb) + " " + str(st)
@@ -195,8 +222,8 @@ def _collides(obj1, obj2):
 #                    if d > mr + yr:
 #                        return False
 #                    else:
-#                        cb = yp.z + handle._get("size") * handle._cFloor
-#                        ct = yp.z + handle._get("size") * handle._cTop
+#                        cb = yp.z + handle._get("scaler") * handle._cFloor
+#                        ct = yp.z + handle._get("scaler") * handle._cTop
 #                        sb = mp.z-mr
 #                        st = mp.z + mr
 #                        # print str(cb) + " " + str(ct) + " " + str(sb) + " " + str(st)
@@ -213,8 +240,8 @@ def _collides(obj1, obj2):
 #                    if d > mr + yr:
 #                        return False
 #                    else:
-#                        cb = mp.z + self._get("size") * self._cFloor
-#                        ct = mp.z + self._get("size") * self._cTop
+#                        cb = mp.z + self._get("scaler") * self._cFloor
+#                        ct = mp.z + self._get("scaler") * self._cTop
 #                        sb = yp.z-yr
 #                        st = yp.z + yr
 #                        # print str(cb) + " " + str(ct) + " " + str(sb) + " " + str(st)

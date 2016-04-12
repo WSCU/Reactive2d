@@ -15,24 +15,26 @@ paddle3 = [p2(150,150)]
 paddleGradStart = [p2(100,50)]
 paddleGradEnd = [p2(200,50)]
 #triangle(integral(mouse-p2(100,100),p2(100,100)))
-#square(paddle[0], size = 100, skew = 0.2, zLayer = 2, color = black, rotation = 0.2, gradientInfo = [paddleGradStart[0], red, paddleGradEnd[0], blue])
-#square(paddle2[0], size = 100, skew = 0.2, zLayer = 2, color = black, rotation = 0, gradientInfo = [paddleGradStart[0], red, paddleGradEnd[0], blue])
-#square(paddle3[0], size = 100, skew = 0.2, zLayer = 2, color = black, rotation = -0.2)
+#square(paddle[0], scaler = 100, skew = 0.2, zLayer = 2, color = black, rotation = 0.2, gradientInfo = [paddleGradStart[0], red, paddleGradEnd[0], blue])
+#square(paddle2[0], scaler = 100, skew = 0.2, zLayer = 2, color = black, rotation = 0, gradientInfo = [paddleGradStart[0], red, paddleGradEnd[0], blue])
+#square(paddle3[0], scaler = 100, skew = 0.2, zLayer = 2, color = black, rotation = -0.2)
 
-#circle(integral(mouse-p2(100,100),p2(100,100)), size = 50, skew  = 2, zLayer = 1)
+#circle(integral(mouse-p2(100,100),p2(100,100)), scaler = 50, skew  = 2, zLayer = 1)
 gp1 = p2(-cos(-localTime), -sin(-localTime))
 gp2 = p2(cos(-localTime), sin(-localTime))
 
-s1 = square(mouse, size = 50, skew = 0.5, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
-s2 = square(p2(100,100), size = 50, skew = 0.5, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = p2(-1,0), gradp2 = p2(1,0), gradc1 = red, gradc2 = blue, duration = 2)
-#square(p2(30, 100), size = 50, skew = 0.5, zLayer = 3, color = black, rotation = 0, useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
-c1 = circle(p2(30, 100), size = 50, skew = 0.5, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
+s1 = circle(mouse, height = 20, width = 50, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, grab = gp1)
+s2 = square(p2(100,100), height = 20, width = 80, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = p2(-1,0), gradp2 = p2(1,0), gradc1 = red, gradc2 = blue)
+#square(p2(30, 100), scaler = 50, skew = 0.5, zLayer = 3, color = black, rotation = 0, useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
+c1 = circle(p2(30, 100), scaler = 1, height = 50, width = 50, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, duration = 10)
 
-#circle(p2(100,100), size = 50, skew = 1, zLayer = 2, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = Color(abs(sin(localTime)), 0, 0), gradc2 = Color(0, abs(cos(localTime)), abs(cos(localTime))))
+#circle(p2(100,100), scaler = 50, skew = 1, zLayer = 2, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = Color(abs(sin(localTime)), 0, 0), gradc2 = Color(0, abs(cos(localTime)), abs(cos(localTime))))
 
-react(c1, delay(5), exitScene)
+#react(c1, delay(5), exitScene)
+#react(s1, touches(s1, s2), exitScene)
 #def makeSquare(m,v):
 #    square(p2(localTime*50+v.x,localTime*50+v.y))
+hit(s1, s2, exitScene)
     
 #react(lbp(), makeSquare)
 
