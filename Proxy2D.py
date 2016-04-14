@@ -25,7 +25,11 @@ class ScreenObject(Proxy.Proxy):
 #        init(self, params)
         
     #Jay's part  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, height = 10, width = 10, rotation = 0, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, grab = p2(0,0),  ** params):
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='',
+    drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, height = 10, 
+    width = 10, rotation = 0, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), 
+    gradc1 = red, gradc2 = red, duration = 0, grab = p2(0,0),
+    tp1 = p2(0, -1), tp2 = p2(1,1), tp3 = p2(-1, 1), ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
         self._drawer = drawer
         self.position = position
@@ -44,6 +48,9 @@ class ScreenObject(Proxy.Proxy):
         self.gradc2 = gradc2
         self.duration = duration
         self.grab = grab
+        self.tp1 = tp1
+        self.tp2 = tp2
+        self.tp3 = tp3
         if duration > 0:
             react(self, delay(duration), exitScene)
         #self.gradientInfo = gradientInfo

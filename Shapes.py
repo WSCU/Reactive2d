@@ -12,6 +12,7 @@ from java.awt.event import WindowAdapter
 from java.awt.event import WindowEvent
 from java.awt.geom import Ellipse2D
 from java.awt.geom import Rectangle2D
+from java.awt.geom import Path2D
 from java.awt import RenderingHints
 from javax.swing import JApplet
 from javax.swing import JFrame
@@ -96,20 +97,24 @@ class Square(ScreenObject):
 #Triangle
 
 #J
-def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 10, rotation = 0, height = 10, width = 10, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red):
+def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, rotation = 0, height = 10, width = 10, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1)):
     return ScreenObject(types = {},
         name = 'Triangle', drawer = drawTriangle, position = position, zDepth = zDepth, 
-        zLayer = zLayer, color = color, scaler = scaler, rotation = rotation, skew = skew, 
-        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2)
+        zLayer = zLayer, color = color, scaler = scaler, rotation = rotation, height = height, width = width, 
+        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2,
+        tp1 = tp1, tp2 = tp2, tp3 = tp3)
         
 def drawTriangle(self, g):
-    #print("Inside drawTriangle")
-    g.setColor(JavaColor(0,0,255))
-    r = self._get("scaler");
-    p = self._get("position")
-    xs = array([int(p.x), int(p.x-Math.sqrt((r*r)/2)), int(p.x+Math.sqrt((r*r)/2))], 'i')
-    ys = array([int(p.y-25), int(p.y+Math.sqrt((r*r)/2)), int(p.y+Math.sqrt((r*r)/2))], 'i')
-    g.fillPolygon(xs, ys, 3)
+    offset = self._get("grab")
+    shape = Path2D.Double()
+    first = self._get("tp1")
+    second = self._get("tp2")
+    third = self._get("tp3")
+    shape.moveTo(first.x, first.y)
+    shape.lineTo(second.x, second.y)
+    shape.lineTo(third.x, third.y)
+    shape.lineTo(first.x, first.y)
+    genericDraw(self, shape, g);
  
 #A
 class Triangle(ScreenObject):

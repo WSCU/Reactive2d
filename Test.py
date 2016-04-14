@@ -22,13 +22,17 @@ paddleGradEnd = [p2(200,50)]
 #circle(integral(mouse-p2(100,100),p2(100,100)), scaler = 50, skew  = 2, zLayer = 1)
 gp1 = p2(-cos(-localTime), -sin(-localTime))
 gp2 = p2(cos(-localTime), sin(-localTime))
+trp1 = p2(0, -(cos(localTime) + 1) / 2)
+trp2 = p2((sin(localTime*3) + 1) / 2, 1)
+trp3 = p2(-(sin(localTime*2) + 1) / 2, 1)
 
 s1 = circle(mouse, height = 20, width = 50, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, grab = gp1)
-s2 = square(p2(100,100), height = 20, width = 80, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = p2(-1,0), gradp2 = p2(1,0), gradc1 = red, gradc2 = blue)
+s2 = square(p2(100,100), height = 20, width = 80, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = p2(-1,0), gradp2 = p2(1,0), gradc1 = red, gradc2 = blue, duration = 3)
 #square(p2(30, 100), scaler = 50, skew = 0.5, zLayer = 3, color = black, rotation = 0, useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
 c1 = circle(p2(30, 100), scaler = 1, height = 50, width = 50, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, duration = 10)
 
-imgS = square(p2(100,100), height = 50, width = 50, texture = "img.jpg")
+#imgS = square(p2(100,100), height = 50, width = 50, texture = "img.jpg")
+t1 = triangle(p2(150,150), height = 50, width = 50, tp1 = trp1, tp2 = trp2, tp3 = trp3)
 
 #circle(p2(100,100), scaler = 50, skew = 1, zLayer = 2, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = Color(abs(sin(localTime)), 0, 0), gradc2 = Color(0, abs(cos(localTime)), abs(cos(localTime))))
 
