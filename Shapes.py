@@ -15,6 +15,13 @@ from java.awt.geom import Rectangle2D
 from java.awt import RenderingHints
 from javax.swing import JApplet
 from javax.swing import JFrame
+from java.awt import Image
+from javax.imageio import *
+from java.net import URL
+from java.io import *
+from java.awt import TexturePaint
+from java.awt import Rectangle
+from java.awt.image import BufferedImage
     
 
 
@@ -61,7 +68,18 @@ def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, 
 def drawSquare(self, g):
     offset = self._get("grab")
     shape = Rectangle2D.Double(offset.x-1, offset.y-1, 2, 2)
+    #if(self._get("texture") == "None"):
     genericDraw(self, shape, g)
+    #else:
+    #    s = ImageIO.read(self._get("texture"))
+    #    texturedThing = TexturePaint(s, Rectangle(0,0,50,50))
+    #    g.setPaint(texturedThing)
+    #    g.fillRect(0,0,50,50)
+        #url = URL(getCodeBase(), self._get("texture"))
+        #img = ImageIO.read(url);
+        #g.drawImage(img, 50, 50, None);
+        #g.drawImage()
+    
     
 #A
 class Square(ScreenObject):

@@ -28,6 +28,8 @@ s2 = square(p2(100,100), height = 20, width = 80, zLayer = 3, color = black, rot
 #square(p2(30, 100), scaler = 50, skew = 0.5, zLayer = 3, color = black, rotation = 0, useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
 c1 = circle(p2(30, 100), scaler = 1, height = 50, width = 50, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, duration = 10)
 
+imgS = square(p2(100,100), height = 50, width = 50, texture = "img.jpg")
+
 #circle(p2(100,100), scaler = 50, skew = 1, zLayer = 2, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = Color(abs(sin(localTime)), 0, 0), gradc2 = Color(0, abs(cos(localTime)), abs(cos(localTime))))
 
 #react(c1, delay(5), exitScene)
