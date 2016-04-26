@@ -26,9 +26,9 @@ class ScreenObject(Proxy.Proxy):
         
     #Jay's part  
     def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='',
-    drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, height = 10, 
+    drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, height = 10, 
     width = 10, rotation = 0, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), 
-    gradc1 = red, gradc2 = red, duration = 0, grab = p2(0,0),
+    gradc1 = red, gradc2 = red, duration = 0, center = p2(0.5,0.5),
     tp1 = p2(0, -1), tp2 = p2(1,1), tp3 = p2(-1, 1), ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
         self._drawer = drawer
@@ -36,7 +36,7 @@ class ScreenObject(Proxy.Proxy):
         self._zLayer = zLayer
         self.zDepth = zDepth
         self.color = color
-        self.scaler = scaler
+        self.scale = scale
         self.height = height
         self.width = width
         self.rotation = rotation
@@ -47,7 +47,7 @@ class ScreenObject(Proxy.Proxy):
         self.gradc1 = gradc1
         self.gradc2 = gradc2
         self.duration = duration
-        self.grab = grab
+        self.center = center
         self.tp1 = tp1
         self.tp2 = tp2
         self.tp3 = tp3
@@ -74,11 +74,11 @@ class ScreenObject(Proxy.Proxy):
             react(self, delay(duration), exitScene)
             
     def _getArea(self):
-        h = int((self._get("scaler") * self._get("height")))
-        w = int((self._get("scaler") * self._get("width")))
+        h = int((self._get("scale") * self._get("height")))
+        w = int((self._get("scale") * self._get("width")))
         p = self._get("position")
         theta = self._get("rotation")
-        ar = Area(Rectangle2D.Double(-1, -1, 2, 2))
+        ar = Area(Rectangle2D.Double(0, 0, 1, 1))
         g = AffineTransform()
         g.translate(p.x, p.y)
         g.rotate(theta)
@@ -88,9 +88,11 @@ class ScreenObject(Proxy.Proxy):
     def _touches(self, testObj, trace = False):
         if(trace):
             print("pos = " + self._get("position"))
-        ar1 = self._getArea()
-        ar2 = testObj._getArea()
-        return ar1.intersects(ar2.getBounds2D())
+        if(self._alive and testObj._alive):
+            ar1 = self._getArea()
+            ar2 = testObj._getArea()
+            return ar1.intersects(ar2.getBounds2D())
+        return False;
 
 def _distance(o1, o2):
         return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
@@ -161,16 +163,16 @@ def _collides(obj1, obj2):
 #            if trace:
  #               print("Touch: " + repr(self) + " " + repr(handle))
 #            #print (repr(self._cRadius))
-#            #print (repr(self.get("scaler")))
+#            #print (repr(self.get("scale")))
 #            
 #            #---  catches zombies  ???  (other objects rely on deleted objects so they cant be deleted permanently)---#
  #           if not self._alive or not handle._alive:
  #               return False
 #            
 #            #---  me vs you position  ---#
-#            mr = self._cRadius * self._get("scaler")
+#            mr = self._cRadius * self._get("scale")
 #            mp = self._get("position") + p3(0, 0, 0)
-#            yr = handle._cRadius * handle._get("scaler")
+#            yr = handle._cRadius * handle._get("scale")
 #            yp = handle._get("position") + p3(0, 0, 0)
         
         #-----  Circle Handling  -----#    
@@ -194,8 +196,8 @@ def _collides(obj1, obj2):
  #           if d > mr + yr:
  #                        return False
  #                    else:
- #                        cb = yp.z + handle._get("scaler") * handle._cFloor
- #                        ct = yp.z + handle._get("scaler") * handle._cTop
+ #                        cb = yp.z + handle._get("scale") * handle._cFloor
+ #                        ct = yp.z + handle._get("scale") * handle._cTop
  #                        sb = mp.z-mr
  #                        st = mp.z + mr
  #                        # print str(cb) + " " + str(ct) + " " + str(sb) + " " + str(st)
@@ -229,8 +231,8 @@ def _collides(obj1, obj2):
 #                    if d > mr + yr:
 #                        return False
 #                    else:
-#                        cb = yp.z + handle._get("scaler") * handle._cFloor
-#                        ct = yp.z + handle._get("scaler") * handle._cTop
+#                        cb = yp.z + handle._get("scale") * handle._cFloor
+#                        ct = yp.z + handle._get("scale") * handle._cTop
 #                        sb = mp.z-mr
 #                        st = mp.z + mr
 #                        # print str(cb) + " " + str(ct) + " " + str(sb) + " " + str(st)
@@ -247,8 +249,8 @@ def _collides(obj1, obj2):
 #                    if d > mr + yr:
 #                        return False
 #                    else:
-#                        cb = mp.z + self._get("scaler") * self._cFloor
-#                        ct = mp.z + self._get("scaler") * self._cTop
+#                        cb = mp.z + self._get("scale") * self._cFloor
+#                        ct = mp.z + self._get("scale") * self._cTop
 #                        sb = yp.z-yr
 #                        st = yp.z + yr
 #                        # print str(cb) + " " + str(ct) + " " + str(sb) + " " + str(st)

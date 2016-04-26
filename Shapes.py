@@ -23,7 +23,8 @@ from java.io import *
 from java.awt import TexturePaint
 from java.awt import Rectangle
 from java.awt.image import BufferedImage
-    
+
+from java.awt.geom import AffineTransform
 
 
 #Circle
@@ -35,77 +36,41 @@ from java.awt.image import BufferedImage
 #[startP2, startColor, endP2, endColor]
 #where startColor and endColor are assumed to be pythonFRP colors.
 #If there aren't enough arguments, we skip all the gradient crap and fill it with a solid color.
-def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, rotation = 0, height = 10, width = 10, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, grab = p2(0,0)):
+def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, center = p2(0.5,0.5)):
     return ScreenObject(types = {}, name = 'Circle',  drawer = drawCircle, position = position, 
-        zDepth = zDepth, zLayer = zLayer, color = color, scaler = scaler, rotation = rotation, height = height, width = width, 
-        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration, grab = grab)
+        zDepth = zDepth, zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
+        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration, center = center)
 
 def drawCircle(self, g):
-    offset = self._get("grab")
-    shape = Ellipse2D.Double(offset.x-1, offset.y-1, 2, 2)
+    offset = self._get("center")
+    shape = Ellipse2D.Double(offset.x - 1, offset.y - 1, 1, 1)
     genericDraw(self, shape, g);
     
-#A
-class Circle(ScreenObject):
-    def getCollisionVector(self, obj):
-        directionVector = obj.position - self.position
-        dist = _distance(self,obj)
-        directionUnit = (directionVector.x / dist, directionVector.y / dist)
-        collisionVector = directionUnit * radius
-        return collisionVector
-
-
-
-
-#Square
-
-#J
-def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, rotation = 0, height = 10, width = 10, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, grab = p2(0,0)):
+    
+def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, center = p2(0.5,0.5)):
 
     return ScreenObject(types = {}, name = 'Square', drawer = drawSquare, position = position, 
-        zDepth = zDepth, zLayer = zLayer, color = color, scaler = scaler, rotation = rotation, height = height, width = width,  
-        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration, grab = grab) 
+        zDepth = zDepth, zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width,  
+        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration, center = center) 
 
 def drawSquare(self, g):
-    offset = self._get("grab")
-    shape = Rectangle2D.Double(offset.x-1, offset.y-1, 2, 2)
+    offset = self._get("center")
+    shape = Rectangle2D.Double(offset.x - 1, offset.y - 1, 1, 1)
     #if(self._get("texture") == "None"):
     genericDraw(self, shape, g)
-    #else:
-    #    s = ImageIO.read(self._get("texture"))
-    #    texturedThing = TexturePaint(s, Rectangle(0,0,50,50))
-    #    g.setPaint(texturedThing)
-    #    g.fillRect(0,0,50,50)
-        #url = URL(getCodeBase(), self._get("texture"))
-        #img = ImageIO.read(url);
-        #g.drawImage(img, 50, 50, None);
-        #g.drawImage()
     
     
-#A
-class Square(ScreenObject):
-    def getCollisionVector(self, obj):
-        directionVector = obj.position - self.position
-        dist = _distance(self,obj)
-        directionUnit = (directionVector.x / dist, directionVector.y / dist)
-        collisionVector = directionUnit * height
-        return collisionVector
     
- 
-  
-  
 #Triangle
-
-#J
-def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scaler = 1, rotation = 0, height = 10, width = 10, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1)):
+def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1), center = p2(0.5,0.5), duration = 0):
     return ScreenObject(types = {},
         name = 'Triangle', drawer = drawTriangle, position = position, zDepth = zDepth, 
-        zLayer = zLayer, color = color, scaler = scaler, rotation = rotation, height = height, width = width, 
-        texture = texture, useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2,
-        tp1 = tp1, tp2 = tp2, tp3 = tp3)
+        zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
+        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2,
+        tp1 = tp1, tp2 = tp2, tp3 = tp3, center = center, duration = duration)
         
 def drawTriangle(self, g):
-    offset = self._get("grab")
+    offset = self._get("center")
     shape = Path2D.Double()
     first = self._get("tp1")
     second = self._get("tp2")
@@ -115,37 +80,56 @@ def drawTriangle(self, g):
     shape.lineTo(third.x, third.y)
     shape.lineTo(first.x, first.y)
     genericDraw(self, shape, g);
+    
+    
+    
+    
+def image(texture = "None", position = p2(0,0), zDepth = 0, zLayer = 0, scale = 1, rotation = 0, height = 10, width = 10, duration = 0, center = p2(0.5,0.5)):
+    SO = ScreenObject(types = {}, name = 'Square', drawer = drawImage, position = position, 
+        zDepth = zDepth, zLayer = zLayer, scale = scale, rotation = rotation, height = height, width = width,  
+        texture = texture, duration = duration, center = center)
+    SO._img = ImageIO.read(File("C:\\Users\\stu598041\\Desktop\\img.jpg"));
+    return SO
+
+def drawImage(self, g):
+    #print(str(self._img.getWidth()))
+    relativeHeight = (self._get("height") / float(self._img.getHeight())) * self._get("scale")
+    relativeWidth  = (self._get("width")  / float(self._img.getWidth()))  * self._get("scale")
+    #print (str(relativeHeight))
+    atImageSpace = AffineTransform();
+    pos = self._get("position")
+    atImageSpace.translate(pos.x, pos.y)
+    atImageSpace.rotate(self._get("rotation"))
+    atImageSpace.scale(relativeWidth, relativeHeight)
+    g.drawImage(self._img, atImageSpace, None);
  
 #A
-class Triangle(ScreenObject):
-    def getCollisionVector(self, obj):
-        directionVector = obj.position - self.position
-        dist = _distance(self,obj)
-        directionUnit = (directionVector.x / dist, directionVector.y / dist)
-        collisionVector = directionUnit * 15
-        return collisionVector
+
+
+
+
 
 def genericDraw(self, shape, g):
     p = self._get("position")
-    h = int((self._get("scaler") * self._get("height")))
-    w = int((self._get("scaler") * self._get("width")))
+    h = int((self._get("scale") * self._get("height")))
+    w = int((self._get("scale") * self._get("width")))
     theta = self._get("rotation")
     useGrad = self._get("useGrad")    
     oldForm = g.getTransform()
     g.translate(p.x, p.y)
     g.rotate(theta)
-    g.scale(w/2, h/2)
+    g.scale(w, h)
     rh = RenderingHints( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g.setRenderingHints(rh);
     if not useGrad:
         g.setPaint(toJavaColor(self._get("color")))
         g.fill(shape);
     else:
-        offset = self._get("grab")
-        rGradx1 = self._get("gradp1").x + offset.x
-        rGradx2 = self._get("gradp2").x + offset.x
-        rGrady1 = self._get("gradp1").y + offset.y
-        rGrady2 = self._get("gradp2").y + offset.y
+        offset = self._get("center")
+        rGradx1 = (self._get("gradp1").x / 2) + offset.x
+        rGradx2 = (self._get("gradp2").x / 2) + offset.x
+        rGrady1 = (self._get("gradp1").y / 2) + offset.y
+        rGrady2 = (self._get("gradp2").y / 2) + offset.y
         gradc1 = self._get("gradc1")
         gradc2 = self._get("gradc2")
         theGradient = GradientPaint(rGradx1, rGrady1, toJavaColor(gradc1), rGradx2, rGrady2, toJavaColor(gradc2));

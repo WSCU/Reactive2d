@@ -10,7 +10,9 @@ from java.awt.event import MouseMotionAdapter
 from java.lang import System
 from javax.swing import JFrame
 from javax.swing import JPanel
+from javax.swing import JButton
 from javax.swing import Timer
+from javax.swing import JSlider
 from pythonfrp.Numerics import *
 from java.awt import Dimension
 from java.awt import GradientPaint
@@ -22,6 +24,7 @@ from java.awt.geom import Ellipse2D
 from java.awt.geom import Rectangle2D
 from javax.swing import JApplet
 from javax.swing import JFrame
+from java.awt import BorderLayout
 
 from pythonfrp.Engine import *
 from Reactive2D import *
@@ -142,25 +145,41 @@ class Example(JFrame, ActionListener):
         self.getContentPane().add(self.canvas)
         self.setTitle("Test")
         self.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-        self.setSize(300, 300)
+        self.xSize = 300
+        self.ySize = 300
+        self.setSize(self.xSize, self.ySize)
         self.setLocationRelativeTo(None)
         self.setBackground(JavaColor(255, 255, 255))
         self.setVisible(True)
+        
+        #self.button = JButton("This is a button")
+        #self.add(self.button, BorderLayout.SOUTH)
+        #self.button.addActionListener(self)
+        
         self.timer=Timer(50, self)
         self.timer.start()
 
 # This is the heartbeat handling code - this is attached to a timer in the frame      
 
     def actionPerformed(self, e):
-        currentTime=System.currentTimeMillis()
-        #if ((currentTime-startTime[0]) % 75 == 0):
-        #    balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
-        del screenObjects[:]
-#        print(currentTime-startTime[0])
-#        print('Objects: ' + str(Globals.worldObjects))
-        heartbeat((currentTime - startTime[0]) / 1000.0, externalEvents)
-        externalEvents.clear()
-        self.repaint() 
+        #if(e.getSource() == self.button):
+            #self.addSlider()
+        #else:
+            currentTime=System.currentTimeMillis()
+            #if ((currentTime-startTime[0]) % 75 == 0):
+            #    balls.append(circle(p2(random.randrange(50,250),270-localTime*100), 10))
+            del screenObjects[:]
+    #        print(currentTime-startTime[0])
+    #        print('Objects: ' + str(Globals.worldObjects))
+            heartbeat((currentTime - startTime[0]) / 1000.0, externalEvents)
+            externalEvents.clear()
+            self.repaint() 
+    def addSlider(self): #adds a new slider at the bottom of the window.
+        slider = JSlider()
+        self.add(slider, BorderLayout.SOUTH) #this is the best way I could find to make sure the slider appears somewhere consistent.
+        self.ySize = self.ySize + 20 #the problem, sadly, is that all of the sliders and buttons and stuff appear at the SAME PLACE, overlapping.
+        self.setSize(self.xSize, self.ySize)
+        
  
 mouse = ObserverF(lambda x: mouse_pos[0], type = numType)
 
