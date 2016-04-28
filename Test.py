@@ -4,8 +4,11 @@ from pythonfrp import *
 from pythonfrp.Numerics import *
 from pythonfrp.Color import *
  
+def nullPrint(x, y):
+    print("boopity")
+    return None
 
-square(p2(25,25))
+staticSquare = square(p2(25,25))
 #circle(integral(mouse-p2(100,100),p2(100,100)),time*10)
 #circle(p2(10,time*20), 10)
 
@@ -26,7 +29,7 @@ trp1 = p2(0, -(cos(localTime) + 1) / 4)
 trp2 = p2((sin(localTime*3) + 1) / 4, 1)
 trp3 = p2(-(sin(localTime*2) + 1) / 4, 1)
 
-c1 = circle(mouse, height = 20, width = 50, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, center = gp1)
+c1 = circle(mouse, height = 100, width = 100, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, center = gp1)
 s1 = square(p2(100,100), height = 20, width = 80, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = p2(-1,0), gradp2 = p2(1,0), gradc1 = red, gradc2 = blue, duration = 3)
 #square(p2(30, 100), scale = 50, skew = 0.5, zLayer = 3, color = black, rotation = 0, useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
 c2 = circle(p2(30, 100), scale = 1, height = 20, width = 50, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, duration = 10)
@@ -40,7 +43,9 @@ img1 = image(texture = "C:\\Users\\stu598041\\Desktop\\img.jpg", position = p2(1
 #react(s1, touches(s1, s2), exitScene)
 #def makeSquare(m,v):
 #    square(p2(localTime*50+v.x,localTime*50+v.y))
-hit(c1, s1, exitScene)
+
+#hit(c1, s1, exitScene)
+hit(c1, staticSquare, nullPrint)
     
 #react(lbp(), makeSquare)
 

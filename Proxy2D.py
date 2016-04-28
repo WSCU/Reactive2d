@@ -77,12 +77,13 @@ class ScreenObject(Proxy.Proxy):
         h = int((self._get("scale") * self._get("height")))
         w = int((self._get("scale") * self._get("width")))
         p = self._get("position")
+        center = self._get("center")
         theta = self._get("rotation")
-        ar = Area(Rectangle2D.Double(0, 0, 1, 1))
+        ar = Area(Rectangle2D.Double(center.x - 1, center.y - 1, 1, 1))
         g = AffineTransform()
         g.translate(p.x, p.y)
         g.rotate(theta)
-        g.scale(w/2, h/2)
+        g.scale(w, h)
         ar.transform(g)
         return ar
     def _touches(self, testObj, trace = False):
