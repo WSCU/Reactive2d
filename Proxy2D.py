@@ -19,33 +19,32 @@ from java.awt.geom import AffineTransform
 
 from jarray import array
 
+def squarea(self, offset): #This is the default area generator. It will be overridden by certain shapes.
+        return Area(Rectangle2D.Double(-offset.x, -offset.y, 1, 1))
+
 class ScreenObject(Proxy.Proxy):
 #    def __init__ (self, updater=None, types={}, name='', init=None, ** params):
 #        Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
 #        init(self, params)
         
     #Jay's part  
-    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='',
-    drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, height = 10, 
-    width = 10, rotation = 0, texture = "None", useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), 
-    gradc1 = red, gradc2 = red, duration = 0, center = p2(0.5,0.5),
+    def __init__ (self, updater = (lambda self: screenObjects.append(self)), types={}, name='', area = squarea,
+    drawer = None, position = p2(0,0), zDepth = 0, zLayer = 0, color = red, gradient = None, scale = 1, height = 10, 
+    width = 10, rotation = 0, texture = "None", duration = 0, center = p2(0.5,0.5),
     tp1 = p2(0, -1), tp2 = p2(1,1), tp3 = p2(-1, 1), ** params):
         Proxy.Proxy.__init__(self, name=name, updater=updater, types=types)
+        self._area = area
         self._drawer = drawer
         self.position = position
         self._zLayer = zLayer
         self.zDepth = zDepth
         self.color = color
+        self._gradient = gradient
         self.scale = scale
         self.height = height
         self.width = width
         self.rotation = rotation
         self.texture = texture
-        self.useGrad = useGrad
-        self.gradp1 = gradp1
-        self.gradp2 = gradp2
-        self.gradc1 = gradc1
-        self.gradc2 = gradc2
         self.duration = duration
         self.center = center
         self.tp1 = tp1
@@ -67,7 +66,7 @@ class ScreenObject(Proxy.Proxy):
     #A crop won't, but if we want to stretch/compress the image to fit...we may.
     
     def update(self):
-        print("UPDOOT")
+        print("UPDOOT") # I don't think this is ever called. Ever.
         screenObjects.append(self);
         if self.duration > 0:
             print("REMOFE")
@@ -79,7 +78,8 @@ class ScreenObject(Proxy.Proxy):
         p = self._get("position")
         center = self._get("center")
         theta = self._get("rotation")
-        ar = Area(Rectangle2D.Double(-center.x, -center.y, 1, 1))
+        #ar = Area(Rectangle2D.Double(-center.x, -center.y, 1, 1))
+        ar = self._area(self, center)
         g = AffineTransform()
         g.translate(p.x, p.y)
         g.rotate(theta)
@@ -94,7 +94,7 @@ class ScreenObject(Proxy.Proxy):
             ar2 = testObj._getArea()
             return ar1.intersects(ar2.getBounds2D())
         return False;
-
+    
 def _distance(o1, o2):
         return Math.sqrt(Math.pow(o2.x - o1.x,2) + Math.pow(o2.y - o1.y, 2))
         
@@ -105,4 +105,5 @@ def _collides(obj1, obj2):
     #we know now where one object is relative to the other and now want to know when these points cross
     return distance(obj1.postion + r1 , obj2.postition + r2) <= 0
 
-        
+
+  

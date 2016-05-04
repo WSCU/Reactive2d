@@ -36,22 +36,28 @@ from java.awt.geom import AffineTransform
 #[startP2, startColor, endP2, endColor]
 #where startColor and endColor are assumed to be pythonFRP colors.
 #If there aren't enough arguments, we skip all the gradient crap and fill it with a solid color.
-def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, center = p2(0.5,0.5)):
-    return ScreenObject(types = {}, name = 'Circle',  drawer = drawCircle, position = position, 
+def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, 
+    gradient = None, duration = 0, center = p2(0.5,0.5)):
+    return ScreenObject(types = {}, area = circularea, name = 'Circle',  drawer = drawCircle, position = position, 
         zDepth = zDepth, zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
-        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration, center = center)
+        gradient = gradient, duration = duration, center = center)
+
 
 def drawCircle(self, g):
     offset = self._get("center")
     shape = Ellipse2D.Double(-offset.x, -offset.y, 1, 1)
     genericDraw(self, shape, g);
     
+def circularea(self, offset):
+    return Area(Ellipse2D.Double(-offset.x, -offset.y, 1, 1))
     
-def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, duration = 0, center = p2(0.5,0.5)):
-
+    
+    
+def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, 
+    gradient = None, duration = 0, center = p2(0.5,0.5)):
     return ScreenObject(types = {}, name = 'Square', drawer = drawSquare, position = position, 
         zDepth = zDepth, zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width,  
-        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2, duration = duration, center = center) 
+        gradient = gradient, duration = duration, center = center) 
 
 def drawSquare(self, g):
     offset = self._get("center")
@@ -62,12 +68,12 @@ def drawSquare(self, g):
     
     
 #Triangle
-def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1), center = p2(0.5,0.5), duration = 0):
+def triangle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, 
+    gradient = None, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1), center = p2(0.5,0.5), duration = 0):
     return ScreenObject(types = {},
-        name = 'Triangle', drawer = drawTriangle, position = position, zDepth = zDepth, 
+        name = 'Triangle', drawer = drawTriangle, area = triarea, position = position, zDepth = zDepth, 
         zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
-        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2,
-        tp1 = tp1, tp2 = tp2, tp3 = tp3, center = center, duration = duration)
+        gradient = gradient, tp1 = tp1, tp2 = tp2, tp3 = tp3, center = center, duration = duration)
         
 def drawTriangle(self, g):
     offset = self._get("center")
@@ -81,14 +87,24 @@ def drawTriangle(self, g):
     shape.lineTo(first.x - offset.x, first.y  - offset.y)
     genericDraw(self, shape, g);
     
+def triarea(self, offset):
+    shape = Path2D.Double()
+    first = self._get("tp1")
+    second = self._get("tp2")
+    third = self._get("tp3")
+    shape.moveTo(first.x - offset.x, first.y - offset.y)
+    shape.lineTo(second.x - offset.x, second.y - offset.y)
+    shape.lineTo(third.x - offset.x, third.y  - offset.y)
+    shape.lineTo(first.x - offset.x, first.y  - offset.y)
+    return Area(shape)
+    
 #Polygon
-def polygon(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1), center = p2(0.5,0.5), duration = 0,
-    polyPoints = []):
+def polygon(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, 
+    gradient = None, center = p2(0.5,0.5), duration = 0, polyPoints = []):
     SO =  ScreenObject(types = {},
-        name = 'Polygon', drawer = drawPoly, position = position, zDepth = zDepth, 
+        name = 'Polygon', drawer = drawPoly, area = polyarea, position = position, zDepth = zDepth, 
         zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
-        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2,
-        tp1 = tp1, tp2 = tp2, tp3 = tp3, center = center, duration = duration)
+        gradient = gradient, center = center, duration = duration)
     SO._polyPoints = polyPoints
     return SO
         
@@ -102,7 +118,17 @@ def drawPoly(self, g):
             shape.lineTo(points[i].x - offset.x, points[i].y - offset.y)
         genericDraw(self, shape, g);
         
-    
+def polyarea(self, offset):
+    if(len(self._polyPoints) > 2):
+        points = self._polyPoints
+        shape = Path2D.Double()
+        shape = Path2D.Double()
+        shape.moveTo(points[0].x - offset.x, points[0].y - offset.y)
+        for i in range (len(points)):
+            shape.lineTo(points[i].x - offset.x, points[i].y - offset.y)
+        return Area(shape)
+    else:
+        return squarea(self, offset)
 
 
 
@@ -115,38 +141,18 @@ def image(texture = "None", position = p2(0,0), zDepth = 0, zLayer = 0, scale = 
     return SO
 
 def drawImage(self, g):
-    #print(str(self._img.getWidth()))
-#    absoluteWidth  = self._img.getWidth()
-#    absoluteHeight = self._img.getHeight()
-#    relativeWidth  = (self._get("width")  / float(absoluteWidth))  * self._get("scale")
-#    relativeHeight = (self._get("height") / float(absoluteHeight)) * self._get("scale")
 
-#    #print (str(relativeHeight))
-#    atImageSpace = AffineTransform();
-#    pos = self._get("position")
-#    atImageSpace.translate(pos.x, pos.y)
-#    atImageSpace.rotate(self._get("rotation"))
-#    atImageSpace.scale(relativeWidth, relativeHeight)
-#    g.drawImage(self._img, atImageSpace, None);
-    
     p = self._get("position")
     h = int((self._get("scale") * self._get("height")))
     w = int((self._get("scale") * self._get("width")))
     theta = self._get("rotation")
-    useGrad = self._get("useGrad")    
     oldForm = g.getTransform()
     g.translate(p.x, p.y)
     g.rotate(theta)
-    #g.scale(w, h)
     rh = RenderingHints( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g.setRenderingHints(rh);
-    
     offset = self._get("center")
-    #imgWidth = self._img.getWidth()
-    #imgHeight = self._img.getHeight()
     g.drawImage(self._img, int(-offset.x * w), int(-offset.y * h), w, h, JavaColor(0,0,0), None)
-    
-    
     g.setTransform(oldForm)
     
  
@@ -161,26 +167,24 @@ def genericDraw(self, shape, g):
     h = int((self._get("scale") * self._get("height")))
     w = int((self._get("scale") * self._get("width")))
     theta = self._get("rotation")
-    useGrad = self._get("useGrad")    
     oldForm = g.getTransform()
     g.translate(p.x, p.y)
     g.rotate(theta)
     g.scale(w, h)
     rh = RenderingHints( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g.setRenderingHints(rh);
-    if not useGrad:
-        g.setPaint(toJavaColor(self._get("color")))
+    gradient = self._gradient
+    if type(gradient) is GradientPaint:
+        offset = self._get("center")
+        p1 = gradient.getPoint1()
+        p2 = gradient.getPoint2()
+        color = GradientPaint(p1.x - offset.x, p1.y - offset.y, gradient.getColor1(),
+                              p2.x - offset.x, p2.y - offset.y, gradient.getColor2())
+        g.setPaint(color)
         g.fill(shape);
     else:
-        offset = self._get("center")
-        rGradx1 = (self._get("gradp1").x / 2) + offset.x
-        rGradx2 = (self._get("gradp2").x / 2) + offset.x
-        rGrady1 = (self._get("gradp1").y / 2) + offset.y
-        rGrady2 = (self._get("gradp2").y / 2) + offset.y
-        gradc1 = self._get("gradc1")
-        gradc2 = self._get("gradc2")
-        theGradient = GradientPaint(rGradx1, rGrady1, toJavaColor(gradc1), rGradx2, rGrady2, toJavaColor(gradc2));
-        g.setPaint(theGradient);
+        color = self._get("color")
+        g.setPaint(toJavaColor(color));
         g.fill(shape);
     g.setTransform(oldForm)
 

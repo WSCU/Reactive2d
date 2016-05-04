@@ -29,16 +29,14 @@ trp1 = p2(0, -(cos(localTime) + 1) / 4)
 trp2 = p2((sin(localTime*3) + 1) / 4, 1)
 trp3 = p2(-(sin(localTime*2) + 1) / 4, 1)
 
-c1 = circle(mouse, height = 50, width = 100, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, center = gp1)
-s1 = square(p2(100,100), height = 20, width = 80, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = p2(-1,0), gradp2 = p2(1,0), gradc1 = red, gradc2 = blue, duration = 3)
-#square(p2(30, 100), scale = 50, skew = 0.5, zLayer = 3, color = black, rotation = 0, useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue)
-c2 = circle(p2(30, 100), scale = 1, height = 20, width = 50, zLayer = 3, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = red, gradc2 = blue, duration = 10)
+c1 = circle(p2(100, 0), height = 50, width = 100, zLayer = 3, zDepth = sin(localTime), color = black, rotation = (localTime), center = gp1)
 
-#imgS = square(p2(100,100), height = 50, width = 50, texture = "img.jpg")
-t1 = triangle(p2(150,150), height = 50, width = 50, tp1 = trp1, tp2 = trp2, tp3 = trp3)
-img1 = image(texture = "C:\\Users\\stu598041\\Desktop\\Img.jpg", position = p2(180,50), width = 30, height = 50, rotation = localTime, center = trp2)
-pauly = polygon(p2(25,200), height = 50, width = 50, rotation = localTime * 2, polyPoints = [p2(1,1), p2(0.75,0.5), p2(1,0), p2(0.5, 0.25), p2(0, 0), p2(0.25, 0.5), p2(0, 1), p2(0.5, 0.75)])
-#circle(p2(100,100), scale = 50, skew = 1, zLayer = 2, color = black, rotation = (localTime), useGrad = True, gradp1 = gp1, gradp2 = gp2, gradc1 = Color(abs(sin(localTime)), 0, 0), gradc2 = Color(0, abs(cos(localTime)), abs(cos(localTime))))
+testBox = square(mouse)
+
+graddy = GradientPaint(0,0, toJavaColor(red), 1,1, toJavaColor(blue))
+t1 = triangle(p2(150,150), height = 50, width = 50, tp1 = trp1, tp2 = trp2, tp3 = trp3, gradient = graddy)
+img1 = image(texture = "C:\\Users\\stu598041\\Desktop\\Img.jpg", position = p2(180,50), width = 60, height = 60, rotation = localTime)
+pauly = polygon(p2(25,200), gradient = graddy, height = 50, width = 50, rotation = localTime * 2, polyPoints = [p2(1,1), p2(0.75,0.5), p2(1,0), p2(0.5, 0.25), p2(0, 0), p2(0.25, 0.5), p2(0, 1), p2(0.5, 0.75)])
 
 #react(c1, delay(5), exitScene)
 #react(s1, touches(s1, s2), exitScene)
@@ -47,8 +45,7 @@ pauly = polygon(p2(25,200), height = 50, width = 50, rotation = localTime * 2, p
 
 #hit(c1, s1, exitScene)
 hit(c1, staticSquare, nullPrint)
-    
-#react(lbp(), makeSquare)
+hit(testBox, t1, nullPrint)
 
 def keyPressed(self, k):
     if (k == "Left"):
