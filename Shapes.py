@@ -43,7 +43,7 @@ def circle(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, r
 
 def drawCircle(self, g):
     offset = self._get("center")
-    shape = Ellipse2D.Double(offset.x - 1, offset.y - 1, 1, 1)
+    shape = Ellipse2D.Double(-offset.x, -offset.y, 1, 1)
     genericDraw(self, shape, g);
     
     
@@ -55,7 +55,7 @@ def square(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, r
 
 def drawSquare(self, g):
     offset = self._get("center")
-    shape = Rectangle2D.Double(offset.x - 1, offset.y - 1, 1, 1)
+    shape = Rectangle2D.Double(-offset.x, -offset.y, 1, 1)
     #if(self._get("texture") == "None"):
     genericDraw(self, shape, g)
     
@@ -75,33 +75,80 @@ def drawTriangle(self, g):
     first = self._get("tp1")
     second = self._get("tp2")
     third = self._get("tp3")
-    shape.moveTo(first.x, first.y)
-    shape.lineTo(second.x, second.y)
-    shape.lineTo(third.x, third.y)
-    shape.lineTo(first.x, first.y)
+    shape.moveTo(first.x - offset.x, first.y - offset.y)
+    shape.lineTo(second.x - offset.x, second.y - offset.y)
+    shape.lineTo(third.x - offset.x, third.y  - offset.y)
+    shape.lineTo(first.x - offset.x, first.y  - offset.y)
     genericDraw(self, shape, g);
     
+#Polygon
+def polygon(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, useGrad = False, gradp1 = p2(0,0), gradp2 = p2(0,0), gradc1 = red, gradc2 = red, tp1 = p2(0,-1), tp2 = p2(1, 1), tp3 = p2(-1, 1), center = p2(0.5,0.5), duration = 0,
+    polyPoints = []):
+    SO =  ScreenObject(types = {},
+        name = 'Polygon', drawer = drawPoly, position = position, zDepth = zDepth, 
+        zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
+        useGrad = useGrad, gradp1 = gradp1, gradp2 = gradp2, gradc1 = gradc1, gradc2 = gradc2,
+        tp1 = tp1, tp2 = tp2, tp3 = tp3, center = center, duration = duration)
+    SO._polyPoints = polyPoints
+    return SO
+        
+def drawPoly(self, g):
+    if(len(self._polyPoints) > 2):
+        points = self._polyPoints
+        offset = self._get("center")
+        shape = Path2D.Double()
+        shape.moveTo(points[0].x - offset.x, points[0].y - offset.y)
+        for i in range (len(points)):
+            shape.lineTo(points[i].x - offset.x, points[i].y - offset.y)
+        genericDraw(self, shape, g);
+        
     
-    
+
+
+
     
 def image(texture = "None", position = p2(0,0), zDepth = 0, zLayer = 0, scale = 1, rotation = 0, height = 10, width = 10, duration = 0, center = p2(0.5,0.5)):
     SO = ScreenObject(types = {}, name = 'Square', drawer = drawImage, position = position, 
         zDepth = zDepth, zLayer = zLayer, scale = scale, rotation = rotation, height = height, width = width,  
         texture = texture, duration = duration, center = center)
-    SO._img = ImageIO.read(File("C:\\Users\\stu598041\\Desktop\\img.jpg"));
+    SO._img = ImageIO.read(File(texture));
     return SO
 
 def drawImage(self, g):
     #print(str(self._img.getWidth()))
-    relativeHeight = (self._get("height") / float(self._img.getHeight())) * self._get("scale")
-    relativeWidth  = (self._get("width")  / float(self._img.getWidth()))  * self._get("scale")
-    #print (str(relativeHeight))
-    atImageSpace = AffineTransform();
-    pos = self._get("position")
-    atImageSpace.translate(pos.x, pos.y)
-    atImageSpace.rotate(self._get("rotation"))
-    atImageSpace.scale(relativeWidth, relativeHeight)
-    g.drawImage(self._img, atImageSpace, None);
+#    absoluteWidth  = self._img.getWidth()
+#    absoluteHeight = self._img.getHeight()
+#    relativeWidth  = (self._get("width")  / float(absoluteWidth))  * self._get("scale")
+#    relativeHeight = (self._get("height") / float(absoluteHeight)) * self._get("scale")
+
+#    #print (str(relativeHeight))
+#    atImageSpace = AffineTransform();
+#    pos = self._get("position")
+#    atImageSpace.translate(pos.x, pos.y)
+#    atImageSpace.rotate(self._get("rotation"))
+#    atImageSpace.scale(relativeWidth, relativeHeight)
+#    g.drawImage(self._img, atImageSpace, None);
+    
+    p = self._get("position")
+    h = int((self._get("scale") * self._get("height")))
+    w = int((self._get("scale") * self._get("width")))
+    theta = self._get("rotation")
+    useGrad = self._get("useGrad")    
+    oldForm = g.getTransform()
+    g.translate(p.x, p.y)
+    g.rotate(theta)
+    #g.scale(w, h)
+    rh = RenderingHints( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g.setRenderingHints(rh);
+    
+    offset = self._get("center")
+    #imgWidth = self._img.getWidth()
+    #imgHeight = self._img.getHeight()
+    g.drawImage(self._img, int(-offset.x * w), int(-offset.y * h), w, h, JavaColor(0,0,0), None)
+    
+    
+    g.setTransform(oldForm)
+    
  
 #A
 
