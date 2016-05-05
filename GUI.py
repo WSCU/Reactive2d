@@ -181,7 +181,7 @@ class Example(JFrame, ActionListener):
         self.setSize(self.xSize, self.ySize)
         
  
-mouse = ObserverF(lambda x: mouse_pos[0], type = numType)
+mouse = ObserverF(lambda x: mouse_pos[0], type = p2Type)
 
  # This is the start function that initializes the reactive engine and then starts the animation
 def start():

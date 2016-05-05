@@ -100,12 +100,22 @@ def triarea(self, offset):
     
 #Polygon
 def polygon(position = p2(0,0), zDepth = 0, zLayer = 0, color = red, scale = 1, rotation = 0, height = 10, width = 10, 
-    gradient = None, center = p2(0.5,0.5), duration = 0, polyPoints = []):
+    gradient = None, center = p2(0.5,0.5), duration = 0, polyPoints = [p2(0,0), p2(1,0), p2(0,1)]):
     SO =  ScreenObject(types = {},
         name = 'Polygon', drawer = drawPoly, area = polyarea, position = position, zDepth = zDepth, 
         zLayer = zLayer, color = color, scale = scale, rotation = rotation, height = height, width = width, 
         gradient = gradient, center = center, duration = duration)
-    SO._polyPoints = polyPoints
+    normalPoints = []
+    maxX = maxY = -100000
+    minX = minY =  100000
+    for i in range (len(polyPoints)):
+        maxX = max(maxX, polyPoints[i].x)
+        maxY = max(maxY, polyPoints[i].y)
+        minX = min(minX, polyPoints[i].x)
+        minY = min(minY, polyPoints[i].y)
+    for i in range (len(polyPoints)):
+        normalPoints.insert(0, p2((polyPoints[i].x - minX) / maxX, (polyPoints[i].y - minY) / maxY))
+    SO._polyPoints = normalPoints
     return SO
         
 def drawPoly(self, g):
