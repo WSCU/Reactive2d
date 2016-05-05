@@ -145,8 +145,8 @@ class Example(JFrame, ActionListener):
         self.getContentPane().add(self.canvas)
         self.setTitle("Test")
         self.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-        self.xSize = 300
-        self.ySize = 300
+        self.xSize = 500
+        self.ySize = 500
         self.setSize(self.xSize, self.ySize)
         self.setLocationRelativeTo(None)
         self.setBackground(JavaColor(255, 255, 255))

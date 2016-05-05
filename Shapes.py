@@ -134,14 +134,22 @@ def polyarea(self, offset):
 
     
 def image(texture = "None", position = p2(0,0), zDepth = 0, zLayer = 0, scale = 1, rotation = 0, height = 10, width = 10, duration = 0, center = p2(0.5,0.5)):
-    SO = ScreenObject(types = {}, name = 'Square', drawer = drawImage, position = position, 
+    SO = None
+    try:
+        img = ImageIO.read(File(texture))
+        SO = ScreenObject(types = {}, name = 'Image', drawer = drawImage, position = position, 
         zDepth = zDepth, zLayer = zLayer, scale = scale, rotation = rotation, height = height, width = width,  
         texture = texture, duration = duration, center = center)
-    SO._img = ImageIO.read(File(texture));
+        SO._img = img;
+    except IIOException:
+        print "Bad image path!"
+        print (texture + " not found! I blame these stupid absolute image paths.")
+        SO = ScreenObject(types = {}, name = 'Square', drawer = drawSquare, position = position, 
+        zDepth = zDepth, zLayer = zLayer, scale = scale, rotation = rotation, height = height, width = width,  
+        texture = texture, duration = duration, center = center)
     return SO
 
 def drawImage(self, g):
-
     p = self._get("position")
     h = int((self._get("scale") * self._get("height")))
     w = int((self._get("scale") * self._get("width")))
